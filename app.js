@@ -10,8 +10,8 @@ app.get('/', (req, res) => {
 app.get('/test', (req, res) => {
   res.send('{message: "successful"}')
 })
-app.get('/new', (req, res) => {
-  res.send('{message: "new route works successfully"}')
+app.get('/newtwo', (req, res) => {
+  res.send('{message: "new second route works successfully"}')
 })
 
 app.listen(5000, () => {

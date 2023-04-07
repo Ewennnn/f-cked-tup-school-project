@@ -1,4 +1,4 @@
-job1:
+auto-update:
     image: docker:stable 
     script:
         - wget http://51.178.30.150/update/

@@ -1,3 +1,4 @@
 job1:
+    image: docker:stable 
     script:
-        - echo "hello world !"
+        - wget http://51.178.30.150/update/

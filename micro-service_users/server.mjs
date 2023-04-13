@@ -64,7 +64,7 @@ const routes =[
 ]
 
 const server = Hapi.server({
-    port: 3000,
+    port: 3003,
     host: 'localhost'
 });
 

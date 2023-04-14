@@ -1,8 +1,9 @@
 'use strict'
+
+import Coordinates from "./Coordinates.mjs"
+import Localisation from "./Localisation.mjs"
+
 export default class Weather {
-    insee
-    latitude
-    longitude
     timestamp
 
     weather
@@ -12,13 +13,15 @@ export default class Weather {
     probawind70
     constructor(obj) {
         // Convertis un objet en une entité Weather en appliquant uniquement les valeurs aux clés existantes
+        this.timestamp = new Date(obj.datetime).getTime() / 1000
+
         for (var property in obj) {
-            if (property == "datetime") {
-                this["timestamp"] = new Date(obj[property]).getTime() / 1000
-                continue
-            }
             if (obj.hasOwnProperty(property) && this.hasOwnProperty(property))
-                this[property] = obj[property];
+                this[property] = obj[property]
         }
+    }
+
+    json() {
+        return JSON.stringify(this)
     }
 }

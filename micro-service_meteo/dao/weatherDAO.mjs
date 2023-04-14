@@ -5,7 +5,7 @@ import WeatherExport from "../model/WeatherExport.mjs";
 import CacheWeather from "../model/CacheWeather.mjs";
 
 const concept_meteo_api_url = "https://api.meteo-concept.com/api/forecast/daily/periods?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&insee="
-const test_meteo_api_url = "http://51.178.30.150/api/meteo"
+const test_meteo_api_url = "http://51.178.30.150/api/meteo/test"
 
 // Cache permettant de limiter le nombre d'appels à l'API
 const CACHE = []
@@ -36,8 +36,8 @@ export const weatherDao = {
         if (isInCache) {
             return new WeatherExport(CACHE[cacheIndex])
         }
-        // const response = await fetch(concept_meteo_api_url + String(code_insee))
-        const response = await fetch(test_meteo_api_url)
+        const response = await fetch(concept_meteo_api_url + String(code_insee))
+        // const response = await fetch(test_meteo_api_url)
         const content = await response.json()
         const data = new WeatherExport(content)
         CACHE.push(new CacheWeather(data))

@@ -90,7 +90,7 @@ export const userDao = {
         save : async (user) => {
             try {
                 const param = {...user} //clone
-                delete param.restaurants
+                delete param.favorites
                 await prisma.user.create({
                     data: param
                 })
@@ -103,6 +103,24 @@ export const userDao = {
                 return Promise.reject(e)
             }
         },
+            //renvoie la liste des favoris de l'utilisateur
+    addFavorites: async (userAdded, favoritesToAdd) => {
+        try {
+            userAdded.favorites.push(favoritesToAdd)
+            const res = await  prisma.user.update ({
+                data : {
+                    favorites: {
+                        create : userAdded.favorites
+                    }
+                },
+                where : {
+                    login : userAdded.login
+                }
+            })
+        } catch (e) {
+            return Promise.reject(e)
+        }
+    },
     
         //Modifie un utilisateur
         //premd en paramètre le login du user à modifier et la modification

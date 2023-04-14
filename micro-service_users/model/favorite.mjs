@@ -2,19 +2,21 @@
 import User from "./user.mjs"
 
 export default class Favorite {
-    id       
+    id 
     date     
     activite 
     ville 
        
     constructor(obj) {
         // Object.assign(this,obj)
+        if(obj.id)
+            this.is = obj.id
         this.date = obj.date || Date()
         this.activite = obj.activite || ""
         this.ville = obj.ville || ""
-        if (obj.id)
-            this.id = obj.id
-        else
-            this.id = 0
+        // if (obj.id)
+        //     this.id = obj.id
+        // else
+        //     this.id = 0
     }
 }

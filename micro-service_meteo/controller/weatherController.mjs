@@ -16,6 +16,6 @@ export const weatherController = {
     findCompletePrevisions : async (coordinates) => {throw new Error("Not implemented")}
 }
 
-weatherController.findPrevisionsByInsee(44109)
+// weatherController.findPrevisionsByInsee(44109)
 
-await setTimeout(() => {weatherController.findPrevisionsByInsee(44109)}, 500)
+// await setTimeout(() => {weatherController.findPrevisionsByInsee(44109)}, 500)

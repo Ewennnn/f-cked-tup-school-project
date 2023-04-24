@@ -1,8 +1,13 @@
 'use strict'
 
-import CacheWeather from "./CacheWeather.mjs"
-import Localisation from "./Localisation.mjs"
-import Weather from "./Weather.mjs"
+import Joi from "joi"
+import Localisation, { localisationModel } from "./Localisation.mjs"
+import Weather, { weatherModel } from "./Weather.mjs"
+
+export const weatherExportModel = Joi.object({
+    localisation: localisationModel.description("Localisation of the weather data"),
+    weather: Joi.array().items(weatherModel).description("Collection of the weather predictions for the next 14 days.")
+})
 
 export default class WeatherExport {
     localisation

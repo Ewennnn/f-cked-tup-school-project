@@ -1,6 +1,7 @@
 'use strict'
 
 import { weatherDao } from "../dao/weatherDAO.mjs"
+import { meteoConceptCopyData } from "../dao/fakeDataDAO.mjs"
 
 export const weatherController = {
 
@@ -12,5 +13,7 @@ export const weatherController = {
     findFullWeather : async (coordinates) => {throw new Error("Not implemented")},
     findShortWeather : async (coordinates) => {throw new Error("Not implemented")},
 
-    findCompletePrevisions : async (coordinates) => {throw new Error("Not implemented")}
+    findCompletePrevisions : async (coordinates) => {throw new Error("Not implemented")},
+
+    findCopyDataOfMeteoConcept : () => { return meteoConceptCopyData }
 }

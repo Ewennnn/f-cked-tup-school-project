@@ -20,3 +20,16 @@ A chaque micro-service est attribué un port définit dans le tableau ci-dessous
 |Users|Lénny et Jonathan|3003|/api/users/|
 
 Lénny et Jonathan travaillent tous les deux sur le micro-service Users car il nécéssite la mise en place d'une base de données tandis que les deux autres micro-services font "uniquement" appel à d'autres micro-services externes existants.
+
+### Script pm2
+
+Un [script](pm2.sh) permettant de gérer nos multiples micro-services est disponible à la racine du fichier. Celui ci permet d'effectuer les actions suivantes:
+
+|Argument|Actions|
+|:--:|:--|
+|--run nom-du-service|Execute tous les micro-services configurer dans le [fichier de configuration pm2](/ecosystem.config.js). <br/>Si le nom du service est spécifié, seul celui-ci est executé. |
+|--stop nom-du-service|Ferme tous les micro-services actuellement lancés par pm2.<br/>Si le nom du service est spécifié, seul celui-ci est arrêté.|
+|--restart nom-du-service|Redémarre tous les micro-services actuellement lancés par pm2.<br/>Si le nom du service est spécifié, seul celui-ci est redémarré.|
+|--reload nom-du-service|Recharge tous les micro-services actuellement lancés par pm2. <br/>Si le nom du service est spécifié, seul celui-ci est rechargé.|
+|--status|Affiche le status de tous les micro-services actuellement lancés par pm2.|
+|--logs nom-du-service|Affiche les logs de tous les micro-services actuellement lancés par pm2. <br/> Si mle nom du micro-service est spécifié, seul les logs de celui-ci sont affichées.|

@@ -1,9 +1,9 @@
 module.exports = {
   apps : [{
-    name   : "sae4",
-    script : "./app.js",
-    watch: ["/home/debian/eq_alt_00_barassin-lenny_beneteau-victor_bosquet-ewen_boulay-jonathan"],
+    name   : "ms-meteo",
+    script : "./micro-service_meteo/startServer.mjs",
+    watch: ["./micro-service_meteo"],
     watch_delay: 1000,
     ignore_watch: ["node_modules"]
-  }]
+}]
 }

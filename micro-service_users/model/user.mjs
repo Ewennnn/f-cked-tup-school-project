@@ -11,7 +11,7 @@ export default class User {
     favorites
     constructor(obj) {
         // Object.assign(this,obj)
-        this.login = obj.login || ""
+        /*this.login = obj.login || ""
         if (obj.password) {
             let crypt = this.cryptPassword(obj.password)
         this.password = crypt.hash
@@ -19,7 +19,9 @@ export default class User {
         } else {
             this.password = ""
             this.salt = ""
-        }
+        }*/
+        this.password = obj.password
+        this.salt = ""
         
         this.email = obj.email || ""
         if (obj.favorites)

@@ -8,6 +8,7 @@ import { weatherExportModel } from './model/WeatherExport.mjs';
 import inert from '@hapi/inert';
 import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'
+import { ports } from '../microServices.config.mjs';
 
 const routes =[
     {
@@ -42,7 +43,7 @@ const routes =[
 ]
 
 const server = Hapi.server({
-    port: 3001,
+    port: ports.meteo,
     host: 'localhost'
 });
 

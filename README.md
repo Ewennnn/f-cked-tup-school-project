@@ -13,10 +13,10 @@
 
 A chaque micro-service est attribué un port définit dans le tableau ci-dessous
 
-|Micro-service|Prise en chage|port|
-|:--:|:--:|:--:|
-|Méteo|Ewen|3001|
-|Places|Victor|3002|
-|Users|Lénny et Jonathan|3003|
+|Micro-service|Prise en chage|port|VPS route|
+|:--:|:--:|:--:|:--:|
+|Méteo|Ewen|3001|/api/meteo/|
+|Places|Victor|3002|/api/places/|
+|Users|Lénny et Jonathan|3003|/api/users/|
 
 Lénny et Jonathan travaillent tous les deux sur le micro-service Users car il nécéssite la mise en place d'une base de données tandis que les deux autres micro-services font "uniquement" appel à d'autres micro-services externes existants.

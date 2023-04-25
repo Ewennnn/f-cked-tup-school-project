@@ -2,8 +2,16 @@
 
 import Hapi from '@hapi/hapi';
 import {userController} from "./controller/userController.mjs";
+import { ports } from '../microServices.config.mjs';
 
 const routes =[
+    {
+        method: 'GET',
+        path: '/',
+        handler: async (request, h) => {
+            return h.response('<h1>Test micro-service places</h1>')
+        }
+    },
     {
         method: 'GET',
         path: '/user',
@@ -64,7 +72,7 @@ const routes =[
 ]
 
 const server = Hapi.server({
-    port: 3000,
+    port: ports.places,
     host: 'localhost'
 });
 

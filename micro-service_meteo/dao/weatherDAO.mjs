@@ -67,7 +67,7 @@ export const weatherDao = {
         })
         
         console.log(date.getDate());
-        return {date: date, weather: dateWeather}
+        return {date: date, localisation: weather.localisation, weather: dateWeather}
     },
 
     //Récupère les prévisions de pluie précices à 3 heures d'intervalles sur 48h

@@ -39,6 +39,13 @@ const routes =[
         handler: async (req, res) => {
             return res.response(await weatherController.findPrevisionsByInsee(parseInt(req.params.code_insee)))
         }
+    },
+    {
+        method: 'GET',
+        path: '/previsions/{code_insee}/{date}',
+        handler: async (req, res) => {
+            return await weatherController.findDayPrevisionsByInsee(Date.parse(req.params.date), parseInt(req.params.code_insee))
+        }
     }
 ]
 

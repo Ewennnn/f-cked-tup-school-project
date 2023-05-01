@@ -47,13 +47,28 @@ export const weatherDao = {
         // const response = await fetch(test_meteo_api_url)
         const content = await response.json()
         const data = new WeatherExport(content)
+
         CACHE.push(new CacheWeather(data))
 
         return data;
     },
 
     //Récupère les températures moyennes de la journée pour les 14 prochaines jours
-    findLongPrevisionalTemp : (coordinates) => {throw new Error("Not implemented")},
+    findDatePrevisionsByInsee : async (timestamp, code_insee) => {
+        const weather = await weatherDao.find14DaysPrevisionsByInsee(code_insee)
+        const date = new Date(timestamp)
+
+        let dateWeather = []
+        weather.weather.forEach(it => {
+            if (new Date(it.timestamp * 1000).getDate() === date.getDate()) {
+                dateWeather.push(it)
+                console.log("find " + new Date(it.timestamp * 1000).getDate());
+            }
+        })
+        
+        console.log(date.getDate());
+        return {date: date, weather: dateWeather}
+    },
 
     //Récupère les prévisions de pluie précices à 3 heures d'intervalles sur 48h
     findShortWeatherPrevisions : (coordinates) => {throw new Error("Not implemented")},

@@ -8,7 +8,9 @@ export const weatherController = {
     findPrevisionsByInsee : async (code_insee) => {
         return await weatherDao.find14DaysPrevisionsByInsee(code_insee)
     },
-    findShortTemperature : async (coordinates) => {throw new Error("Not implemented")},
+    findDayPrevisionsByInsee : async (date, code_insee) => {
+        return await weatherDao.findDatePrevisionsByInsee(date, code_insee)
+    },
 
     findFullWeather : async (coordinates) => {throw new Error("Not implemented")},
     findShortWeather : async (coordinates) => {throw new Error("Not implemented")},

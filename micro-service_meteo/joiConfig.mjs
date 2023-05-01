@@ -5,7 +5,9 @@ export const WeatherJoiConfig = {
         info: {
             title: "Api meteo",
             version: "0.0.1-SNAPSHOT"
-        }
+        },
+        // swaggerUIPath: '/api/meteo/',
+        // jsonPath: '/api/meteo/swagger.json'
     },
 
     error: Joi.object({

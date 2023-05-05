@@ -11,17 +11,22 @@ export default class User {
     favorites
     constructor(obj) {
         // Object.assign(this,obj)
-        /*this.login = obj.login || ""
+        this.login = obj.login || ""
         if (obj.password) {
-            let crypt = this.cryptPassword(obj.password)
-        this.password = crypt.hash
-        this.salt = crypt.salt 
+            if (!obj.salt){
+                let crypt = this.cryptPassword(obj.password)
+                this.password = crypt.hash
+                this.salt = crypt.salt 
+            } else {
+                this.password = obj.password
+                this.salt = obj.salt
+            }
+            
+        
         } else {
             this.password = ""
             this.salt = ""
-        }*/
-        this.password = obj.password
-        this.salt = ""
+        }
         
         this.email = obj.email || ""
         if (obj.favorites)
@@ -30,19 +35,17 @@ export default class User {
                 .map(favorite => new Favorite(favorite))
         else
             this.favorites = []
+        
+        
     }
 
-    async cryptPassword(password){
-        const hash = ""
-        const salt  = ""
-        try {
-            salt = await bcrypt.genSalt()
-            hash = await bcrypt.hash(password, salt)
-            console.log(hash)
-        } catch (error) {
-            console.log(error.message)
-        }
-        return {hash, salt}
+    cryptPassword(password){
+        let hash = ""
+        let salt  = ""
+        salt = bcrypt.genSaltSync()
+        hash = bcrypt.hashSync(password, salt)
+
+        return {hash: hash, salt:salt}
     }
     
     setPassword(password){

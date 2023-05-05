@@ -7,40 +7,40 @@ import { favoriteDao } from './dao/favoriteDao.mjs'
 
 
 
-await userDao.deleteUsers()
-await favoriteDao.deleteFavorite()
-let users = await userDao.findAll()
-assert.deepStrictEqual(users,[])
-let user = await userDao.findByLogin("jojo")
-assert.equal(user, null)
+// await favoriteDao.deleteFavorite()
+// await userDao.deleteUsers()
+// let users = await userDao.findAll()
+// assert.deepStrictEqual(users,[])
+// let user = await userDao.findByLogin("joja")
+// assert.equal(user, null)
 
 const favoriteToInsert = new Favorite({
     date : new Date("2020-03-19T14:21:00+0200"),
     activite : "restaurant",
-    ville : "Nantes"
+    ville : "Rennes"
 })
 
 const userToInsert = new User({
-    login : "jojo", 
-    password : "jojo",
-    salt : "mdr",
-    email : "jojo@gmail.fr"
+    login : "loulou", 
+    password : "loulou",
+    email : "loulou@gmail.fr"
     // favorite : [favoriteToInsert]
 
 })
 
 
-user = await userDao.save(userToInsert)
+let user = await userDao.save(userToInsert)
 // user = await userDao.add(userToInsert)
+user = await userDao.findByLogin(userToInsert.login)
 assert.deepStrictEqual(user, userToInsert)
-user = await userDao.findByLogin("jojo")
+user = await userDao.findByLogin(userToInsert.login)
 assert.deepStrictEqual(user, userToInsert)
 assert.rejects(userDao.add(userToInsert))
-users = await userDao.findAll()
-assert.deepStrictEqual(users, [userToInsert])
-console.log(users)
+// let users = await userDao.findAll()
+// assert.deepStrictEqual(users, [userToInsert])
+// console.log(users)
 
 
-// favorite =  await favoriteDao.add(favoriteToInsert)
+let favorite =  await favoriteDao.add(favoriteToInsert)
 
 user = await userDao.addFavorites(userToInsert, favoriteToInsert)

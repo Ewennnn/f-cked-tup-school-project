@@ -2,6 +2,7 @@
 
 import WeatherExport from "./WeatherExport.mjs"
 
+// Format des données stockées dans le cache
 export default class CacheWeather {
     localisation
     timestamp

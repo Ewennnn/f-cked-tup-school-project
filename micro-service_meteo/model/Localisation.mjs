@@ -9,6 +9,7 @@ export const localisationModel = Joi.object({
     coords: coordinatesModel.description("Coordinates of the city localisation")
 })
 
+// Format de données d'une localisation géographique
 export default class Localisation {
     city
     code_insee

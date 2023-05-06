@@ -11,18 +11,19 @@ export const weatherModel = Joi.object({
     probawind70: Joi.number().integer().description("Percentage of the wind speed is more than 70km/h")
 })
 
+// Format de données donnant les informations météorologiques pour une date données
 export default class Weather {
-    timestamp
+    timestamp       // Date pour laquelle les données suivantes sont valables
 
-    weather
-    temp2m
-    probarain
-    wind10m
-    probawind70
+    weather         // Sensibilité du temps (mappé à des icones données par l'API)
+    temp2m          // Température en degrés
+    probarain       // Probabilitée de pluie en pourcentage
+    wind10m         // Vitesse moyenne prévisionnelle du vent
+    probawind70     // Probabilitée en pourcentage de reffales de vent à plus de 70 km/h
     constructor(obj) {
-        // Convertis un objet en une entité Weather en appliquant uniquement les valeurs aux clés existantes
         this.timestamp = new Date(obj.datetime).getTime() / 1000
 
+        // Convertis un objet en une entité Weather en appliquant uniquement les valeurs aux clés existantes
         for (var property in obj) {
             if (obj.hasOwnProperty(property) && this.hasOwnProperty(property))
                 this[property] = obj[property]

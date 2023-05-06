@@ -4,7 +4,7 @@ import Joi from 'joi';
 import Hapi from '@hapi/hapi';
 import {weatherController} from "./controller/weatherController.mjs";
 import { WeatherJoiConfig } from './joiConfig.mjs';
-import { weatherExportModel } from './model/WeatherExport.mjs';
+import { dayWeatherExportModel, weatherExportModel } from './model/WeatherExport.mjs';
 import inert from '@hapi/inert';
 import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'
@@ -43,6 +43,22 @@ const routes =[
     {
         method: 'GET',
         path: '/previsions/{code_insee}/{date}',
+        options: {
+            description: 'Get weather predictions for specified day.',
+            tags: ['api'],
+            validate: {
+                params: Joi.object({
+                    code_insee: Joi.number().required(),
+                    date: Joi.date().required().description("Required format : MM-DD-YYYY")
+                })
+            },
+            response: {
+                status: {
+                    200: dayWeatherExportModel,
+                    400: WeatherJoiConfig.error
+                }
+            }
+        },
         handler: async (req, res) => {
             return await weatherController.findDayPrevisionsByInsee(Date.parse(req.params.date), parseInt(req.params.code_insee))
         }
@@ -76,12 +92,7 @@ export const start = async () => {
     return server;
 };
 
-
 process.on('unhandledRejection', (err) => {
-
     console.log(err);
     process.exit(1);
 });
-
-
-

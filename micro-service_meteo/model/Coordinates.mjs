@@ -7,6 +7,7 @@ export const coordinatesModel = Joi.object({
     longitude: Joi.number().required().description("Longitude of the coordinates"),
 })
 
+// Format de données des coordonnées
 export default class Coordinates {
     latitude
     longitude

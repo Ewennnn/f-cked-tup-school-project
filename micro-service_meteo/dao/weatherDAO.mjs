@@ -11,68 +11,64 @@ const test_meteo_api_url = "http://51.178.30.150/api/meteo/test"
 const CACHE = []
 const CACHE_SECONDS = 60*60*6
 
+// DAO du micro-service. Permet de récupérer les données auprès d'un autre service ou d'une autre source de données.
 // Si plusieurs appels sont effectués dans un interval de temps restreint, les données sont récupérés depuis le cache.
 // Les données météos fluctuent assez rarement, on peut donc se permettre d'appeler l'API uniquement toutes les 12h maximum.
 export const weatherDao = {
-    //Récupère les températures précices à 3 heures d'intervalles sur 48h
+    //Récupère les données météorologies à intervalles de 6h sur les 14 prochains jours.
     find14DaysPrevisionsByInsee : async (code_insee) => {
         if (!Number.isInteger(code_insee)) {
             return Promise.reject({})
         }
         
+        // Vérifie si le code insee recherché est présent dans le cache 
         let isInCache = false
         let cacheIndex = undefined
         if (CACHE.length > 0) {
             cacheIndex = 0
             CACHE.forEach(it => {
-                if (it.localisation.code_insee == code_insee) {
+                if (it.localisation.code_insee == code_insee) {     // Si une données dans le cache est celle dont le code_insee est celui recherché
                     console.log("find weather from cache")
-                    if (it.timestamp + CACHE_SECONDS > Math.floor(Date.now() / 1000)) {
+                    if (it.timestamp + CACHE_SECONDS > Math.floor(Date.now() / 1000)) {     // Si l'enregistrement de la donnée du cache est ancienne de moins de 6 heures
                         isInCache = true
-                    } else {
+                    } else {    // Sinon on supprime cette donnée du cache
                         console.log("remove old value from cache. Last save for insee code " + code_insee + ": " + CACHE[cacheIndex].timestamp)
                         CACHE.splice(cacheIndex, 1)
                     }
                     console.log(CACHE.length)
-                    return
+                    return  // La boucle est arrêté car une donnée dans le cache a été trouvée et il a été spécifié quoi faire en fonction de la validitée de cette donnée
                 }
                 cacheIndex += 1
             })
         }
 
-        if (isInCache) {
+        if (isInCache) {    // Si la donnée provient du cache
             return new WeatherExport(CACHE[cacheIndex])
         }
+        // Sinon récupération de données auprès de l'API Météo-Concept
         const response = await fetch(concept_meteo_api_url + String(code_insee))
         // const response = await fetch(test_meteo_api_url)
-        const content = await response.json()
-        const data = new WeatherExport(content)
+        const content = await response.json()   // Conversion en un objet de la réponse
+        const data = new WeatherExport(content) // Création de l'entité de données
 
-        CACHE.push(new CacheWeather(data))
+        CACHE.push(new CacheWeather(data))      // Stockage de la nouvelle donnée dans le cache
 
-        return data;
+        return data;    // Envoie de la réponse
     },
 
-    //Récupère les températures moyennes de la journée pour les 14 prochaines jours
+    //Récupère les données météorologies à intervalle de 6h pour un jour donnée
     findDatePrevisionsByInsee : async (timestamp, code_insee) => {
-        const weather = await weatherDao.find14DaysPrevisionsByInsee(code_insee)
+        const weather = await weatherDao.find14DaysPrevisionsByInsee(code_insee)    // Récupération des données météorologies (pouvant provenir du cache)
         const date = new Date(timestamp)
 
         let dateWeather = []
         weather.weather.forEach(it => {
-            if (new Date(it.timestamp * 1000).getDate() === date.getDate()) {
-                dateWeather.push(it)
+            if (new Date(it.timestamp * 1000).getDate() === date.getDate()) {       // Si la date (numéro du jour uniquement) parmis la liste des données correspond à la date recherchée
+                dateWeather.push(it)    // La date est ajoutée aux valeurs retournées
                 console.log("find " + new Date(it.timestamp * 1000).getDate());
             }
         })
         
-        console.log(date.getDate());
-        return {date: date, localisation: weather.localisation, weather: dateWeather}
+        return {date: date, localisation: weather.localisation, weather: dateWeather}   // Envoie des données
     },
-
-    //Récupère les prévisions de pluie précices à 3 heures d'intervalles sur 48h
-    findShortWeatherPrevisions : (coordinates) => {throw new Error("Not implemented")},
-
-    //Récupère les prévisions de pluie moyennes de la journée pour les 14 prochains jours
-    findLongWeatherPrevisions : (coordinates) => {throw new Error("Not implemented")},
 }

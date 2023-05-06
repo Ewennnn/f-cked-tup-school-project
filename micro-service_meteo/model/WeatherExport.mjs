@@ -9,6 +9,10 @@ export const weatherExportModel = Joi.object({
     weather: Joi.array().items(weatherModel).description("Collection of the weather predictions for the next 14 days.")
 })
 
+export const dayWeatherExportModel = Joi.object({
+    date: Joi.date().description("Date of weather data")
+}).concat(weatherExportModel)
+
 export default class WeatherExport {
     localisation
     weather

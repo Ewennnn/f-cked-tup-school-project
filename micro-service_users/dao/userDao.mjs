@@ -67,7 +67,7 @@ export const userDao = {
         //ajout un utilisateur
         //renvoie l'utilisateur ajouté ou null sinon
         findByLogin : async(login) => {
-            const elt = await prisma.user.findUnique({where: {login: login}}) 
+            const elt = await prisma.user.findUnique({where: {login: login}, include : {favorites : true}}) 
             return elt == null ? null : new User(elt)
         },
         //Supprime tous les users ne renvoie rien

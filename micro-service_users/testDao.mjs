@@ -45,6 +45,14 @@ assert.deepStrictEqual(users, [userToInsert])
 
 user = await userDao.addFavorites(userToInsert, favoriteToInsert)
 
+/** Test : le favoris a bien été rajouté à l'utilisateur */
+
+let favoris = {...favoriteToInsert}
+favoris.id = user.favorites[0].id
+favoris.userId = user.favorites[0].userId
+
+assert.deepStrictEqual([favoris], user.favorites)
+
 console.log(user);
 
 const userToInsert2 = new User({
@@ -62,6 +70,28 @@ assert.deepStrictEqual(user, userToInsert2)
 assert.rejects(userDao.add(userToInsert2))
 
 users = await userDao.findAll()
-// assert.deepStrictEqual(users, [userToInsert, userToInsert2])
+
+/** Test : Si il y a bien les 2 utilisateurs */
+
+/** Problème avec le favoris de l'utilisateur 1 */
+
+userToInsert.favorites[0] = users[0].favorites[0]
+// userToInsert.favorites[0].userId = users[0].favorites[0].userId
+
+assert.deepStrictEqual(users, [userToInsert, userToInsert2])
 
 user = await userDao.addFavorites(userToInsert2, favoriteToInsert)
+
+/** Test : le favoris a bien été rajouté à l'utilisateur */
+
+favoris = {...favoriteToInsert}
+favoris.id = user.favorites[0].id
+favoris.userId = user.favorites[0].userId
+
+assert.deepStrictEqual([favoris], user.favorites)
+
+let listeFavoris = await favoriteDao.findAll()
+
+/** Test :  est-ce-qu'il y a bien 2 Favoris dans la BDD au lieu de 1 */
+
+assert.deepStrictEqual(2, listeFavoris.length)

@@ -6,6 +6,8 @@ export default class Favorite {
     date     
     activite 
     ville 
+
+    userId
        
     constructor(obj) {
         // Object.assign(this,obj)
@@ -14,9 +16,8 @@ export default class Favorite {
         this.date = obj.date || Date()
         this.activite = obj.activite || ""
         this.ville = obj.ville || ""
-        // if (obj.id)
-        //     this.id = obj.id
-        // else
-        //     this.id = 0
+        if(obj.userId){
+            this.userId = obj.userId
+        }
     }
 }

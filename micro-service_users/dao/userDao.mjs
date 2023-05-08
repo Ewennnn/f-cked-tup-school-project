@@ -57,7 +57,11 @@ const model = new Users()
 export const userDao = {
         //tous les utilisteurs
         findAll : async() => (
-            await prisma.user.findMany()
+            await prisma.user.findMany({
+                include : {
+                    favorites : true
+                }
+            })
         ).map(elt => new User(elt)),
 
         //ajout un utilisateur
@@ -115,8 +119,12 @@ export const userDao = {
                 },
                 where : {
                     login : userAdded.login
+                },
+                include : {
+                    favorites : true
                 }
             })
+            return res
         } catch (e) {
             return Promise.reject(e)
         }

@@ -19,6 +19,13 @@ module.exports = {
     watch: ["./micro-service_users"],
     watch_delay: 1000,
     ignore_watch: ["node_modules", "./micro-service_users/node_modules", ".git"]
+  },
+  {
+    name: "ms-location",
+    script: "./micro-service_location/startServer.mjs",
+    watch: ["./micro-service_location"],
+    watch_delay: 1000,
+    ignore_watch: ["node_modules", "./micro-service_location/node_modules", ".git"]
   }
 ]
 }

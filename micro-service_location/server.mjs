@@ -7,6 +7,13 @@ import { locationController } from './controller/locationController.mjs';
 const routes = [
     {
         method: 'GET',
+        path: '/',
+        handler: async (req, res) => {
+            return res.response("<h1>Welcome to location service</h1>")
+        }
+    },
+    {
+        method: 'GET',
         path: '/code_insee/{code_insee}',
         handler: async (req, res) => {
             return res.response(await locationController.findLocationByInsee(parseInt(req.params.code_insee)))

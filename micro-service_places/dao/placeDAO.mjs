@@ -1,5 +1,5 @@
 'use strict'
-import Place from '../model/place.mjs'
+import Place from '../model/Place.mjs'
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyCbMInaYLcbo9HZzZ4Eg3kBxkz2lnWO1N0'
 

@@ -2,11 +2,11 @@
 
 import Joi from "joi"
 import Localisation, { localisationModel } from "./Localisation.mjs"
-import Weather, { weatherModel } from "./Weather.mjs"
+import Place, { placeModel } from "./Place.mjs"
 
 export const placesExportModel = Joi.object({
-    localisation: localisationModel.description("Localisation of the weather data"),
-    weather: Joi.array().items(weatherModel).description("Collection of the weather predictions for the next 14 days.")
+    localisation: localisationModel.description("Localisation of the place data"),
+    place: Joi.array().items(placeModel).description("Collection of the information about the place.")
 })
 
 export default class PlacesExport {
@@ -21,12 +21,12 @@ export default class PlacesExport {
                 latitude: obj.city.latitude,
                 longitude: obj.city.longitude
             })
-            this.weather = []
+            this.place = []
             if (Array.isArray(obj.forecast)) {
 
                 obj.forecast.forEach(it => 
-                it.forEach(w => 
-                    this.weather.push(new Weather(w))
+                it.forEach(p => 
+                    this.place.push(new Place(p))
                     )
                 )
             }

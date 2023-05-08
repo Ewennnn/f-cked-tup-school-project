@@ -3,6 +3,8 @@
 import Joi from 'joi';
 import Hapi from '@hapi/hapi';
 import { placeController } from "./controller/placeController.mjs";
+import { PlacesJoiConfig } from "./joiConfig.mjs"
+import { placesExportModel } from './model/PlacesExport.mjs';
 import inert from '@hapi/inert';
 import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'
@@ -29,6 +31,12 @@ const routes =[
                         longitude: Joi.number().required()
                     }
                 }).description('Required format : { latitude: number, longitude: number }')
+            },
+            response: {
+                status: {
+                    200: placesExportModel,
+                    400: PlacesJoiConfig.error
+                }
             }
         },
         handler: async (request, h) => {

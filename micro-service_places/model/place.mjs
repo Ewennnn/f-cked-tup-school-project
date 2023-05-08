@@ -1,7 +1,8 @@
 'use strict'
-export default class User {
-    login
-    password
+export default class Place {
+    placeId
+    coords
+
     constructor(obj) {
         Object.assign(this,obj)
     }

@@ -20,18 +20,17 @@ const routes =[
     },
     {
         method: 'GET',
-        path: '/restaurants',
+        path: '/restaurants/{latitude}/{longitude}/{radius}',
         options: {
             description: 'Get the restaurants around the location',
             tags: ['api'],
-            validate: {
-                params: Joi.object({
-                    location: {
-                        latitude: Joi.number().required(),
-                        longitude: Joi.number().required()
-                    }
-                }).description('Required format : { latitude: number, longitude: number }')
-            },
+            // validate: {
+            //     params: Joi.object({
+            //         latitude: Joi.number().required(),
+            //         longitude: Joi.number().required(),
+            //         radius: Joi.number().integer().required()
+            //     }).description('Required format : coucou')
+            // },
             response: {
                 status: {
                     200: placesExportModel,
@@ -41,7 +40,7 @@ const routes =[
         },
         handler: async (request, h) => {
             //le message renvoyé et le code http
-            return h.response(await placeController.findRestaurantsByLocation({lat: 47.218371, lng: -1.553621}, 3000)).code(200)
+            return h.response(await placeController.findRestaurantsByLocation({lat: parseFloat(request.params.latitude), lng: parseFloat(request.params.longitude)}, parseInt(request.params.radius))).code(200)
         }
     }
 ]

@@ -1,6 +1,7 @@
 'use strict'
 import User from '../model/user.mjs'
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -77,8 +78,10 @@ export const userDao = {
 
         },
         //supprime un utilisateur ne renvoie rien
-        deleteByLogin: async(login) => 
-            await prisma.deleteByLogin(login)
+        deleteByLogin: async(login) => {
+            const elt = await prisma.user.delete({where : {login : login}})
+            return new User(elt)
+        }
         ,
         //ajout un utilisateur
         //renvoie l'utilisateur ajouté ou null si il était déjà présent
@@ -134,6 +137,14 @@ export const userDao = {
         //premd en paramètre le login du user à modifier et la modification
         //renvoie le user modifier ou null
         update: async(login, user) => {
+            if(user.password){
+                let hash = ""
+                let salt  = ""
+                salt = bcrypt.genSaltSync()
+                hash = bcrypt.hashSync(user.password, salt)
+                user.password = hash
+                user.salt = salt
+            }
             try {
                 const elt = await prisma.user.updateMany({
                     where: {

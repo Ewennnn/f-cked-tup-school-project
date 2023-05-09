@@ -1,8 +1,16 @@
 'use strict';
 
 import Hapi from '@hapi/hapi';
+import  Joi from 'joi';
 import {userController} from "./controller/userController.mjs";
 import { ports } from '../microServices.config.mjs';
+import User from './model/user.mjs';
+
+const joiUser = Joi.object({
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+    email: Joi.string().required()
+})
 
 const routes =[
     {
@@ -36,21 +44,33 @@ const routes =[
     {
         method: 'POST',
         path: '/user',
+        options: {
+            validate: {
+                payload: joiUser
+            }
+        },
         handler: async (request, h) => {
+            try{
             //Le body est accessible via request.payload
-            const userToAdd = request.payload
-            const user = await userController.add(userToAdd)
+            const param = request.payload
+            const userToAdd = new User(param)
+            const user = await userController.save(userToAdd)
             if (user!=null)
                 return h.response(user).code(201)
             else
                 return h.response({message: 'already exist'}).code(400)
+            }catch(e){
+                return h.response({message: e, code: 500}).code(500)
+            }
         }
+        
     },
     {
         method: 'DELETE',
         path: '/user/{login}',
         handler: async (request, h) => {
 
+            console.log(request.params.login);
             const user = await userController.deleteByLogin(request.params.login)
             if (user!=null)
                 return h.response(user).code(200)
@@ -62,11 +82,15 @@ const routes =[
         method: 'PUT',
         path: '/user/{login}',
         handler: async (request, h) => {
+            try{
             const user = await userController.update(request.params.login,request.payload)
             if (user!=null)
                 return h.response(user).code(200)
             else
                 return h.response({message: 'not found'}).code(400)
+            }catch(e){
+                return h.response({message: "error", code: 500}).code(500)
+            }
         }
     }
 ]

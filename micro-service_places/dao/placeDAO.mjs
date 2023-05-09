@@ -1,5 +1,6 @@
 'use strict'
 import Place from '../model/Place.mjs'
+import fetch from 'node-fetch'
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyCbMInaYLcbo9HZzZ4Eg3kBxkz2lnWO1N0'
 
@@ -18,9 +19,11 @@ export const placeDAO = {
       const response = await fetch(url)
       const data = await response.json()
       if (data.status === 'OK') {
-        return data.results
+        console.log("TOTO");
+        return data
       } else {
         throw new Error('Failed to fetch restaurants')
+        return "TA MAMAN"
       }
     },
 

@@ -2,7 +2,7 @@
 
 import Joi from "joi"
 import Localisation, { localisationModel } from "./Localisation.mjs"
-import Place, { placeModel } from "./Place.mjs"
+import Place, { placeModel } from "./place.mjs"
 
 export const placesExportModel = Joi.object({
     localisation: localisationModel.description("Localisation of the place data"),

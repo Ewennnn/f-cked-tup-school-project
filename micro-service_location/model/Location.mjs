@@ -8,7 +8,8 @@ export const locationModel = Joi.object({
     city: Joi.string().required().description("Name of the city"),
     code_insee: Joi.number().required().description("Insee code of the city"),
     coords: coordinatesModel
-})
+}).description("Basic city informations can be used to get more informations by other service")
+.meta({className: 'Location'})
 
 export default class Location {
     city

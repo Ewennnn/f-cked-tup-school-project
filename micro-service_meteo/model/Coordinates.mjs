@@ -13,7 +13,6 @@ export default class Coordinates {
     longitude
 
     constructor(obj) {
-        this.latitude = obj.latitude || undefined
-        this.longitude = obj.longitude || undefined   
+        Object.assign(this, obj)
     }
 }

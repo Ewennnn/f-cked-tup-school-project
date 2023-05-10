@@ -18,6 +18,8 @@ A chaque micro-service est attribué un port définit dans le tableau ci-dessous
 |Méteo|Ewen|3001|/api/meteo/|
 |Places|Victor|3002|/api/places/|
 |Users|Lénny et Jonathan|3003|/api/users/|
+|Location|Ewen|3004|/api/location/|
+
 
 Lénny et Jonathan travaillent tous les deux sur le micro-service Users car il nécéssite la mise en place d'une base de données tandis que les deux autres micro-services font "uniquement" appel à d'autres micro-services externes existants.
 

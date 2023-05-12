@@ -19,7 +19,8 @@ export const placeDAO = {
       const response = await fetch(url)
       const data = await response.json()
       if (data.status === 'OK') {
-        return data
+        // console.log(data.results);
+        return data.results
       } else {
         return {message: "error"}
       }
@@ -32,7 +33,7 @@ export const placeDAO = {
         const response = await fetch(url)
         const data = await response.json()
         if (data.status === 'OK') {
-            return data.result
+            return data.results
         } else {
             throw new Error('Failed to fetch restaurant details')
         }

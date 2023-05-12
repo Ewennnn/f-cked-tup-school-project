@@ -12,7 +12,7 @@ class Favorites {
 const model = new Favorites()
 
 
-export const favoriteDao = {
+export const favorisDao = {
         //tous les utilisteurs
         findAll : async() => (
             await prisma.favorite.findMany()
@@ -25,7 +25,7 @@ export const favoriteDao = {
         //     return elt == null ? null : new User(elt)
         // },
         //Supprime tous les users ne renvoie rien
-        deleteFavorite: async() => {await prisma
+        deleteFavoris: async() => {await prisma
             .favorite
             .deleteMany()
 
@@ -48,14 +48,12 @@ export const favoriteDao = {
         save : async (favorite) => {
             try {
                 const param = {...favorite} //clone
-                // delete param.favorites
+                delete param.user
                 await prisma.favorite.create({
                     data: param
                 })
     
-                const favoriteAdded =
-    
-                    await favoriteDao.findByLogin(favorite.findAll())
+                const favoriteAdded = await favorisDao.findAll()[-1]
                 return favoriteAdded
             } catch (e) {
                 return Promise.reject(e)

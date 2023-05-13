@@ -10,6 +10,15 @@ import HapiSwagger from 'hapi-swagger'
 import { ports } from '../microServices.config.mjs';
 import { placesExportModel } from './model/PlacesExport.mjs';
 
+const placesExportModel = Joi.object({
+      id: Joi.string().required(),
+      name: Joi.string().required(),
+    //   location: localisationModel.required(),
+      rating: Joi.number().required(),
+      types: Joi.array().items(Joi.string()).required(),
+      user_rating_total: Joi.number().required(),
+      vicinity: Joi.string().required(),
+    });
 
 const routes =[
     {
@@ -30,14 +39,14 @@ const routes =[
                     latitude: Joi.number().required(),
                     longitude: Joi.number().required(),
                     radius: Joi.number().integer().required()
-                }).description('Required format : coucou')
+                }).description('Required format : /latitude/longitude/radius')
             },
-            response: {
-                status: {
-                    200: placesExportModel,
-                    400: PlacesJoiConfig.error
-                }
-            }
+            // response: {
+            //     status: {
+            //         200: placesExportModel,
+            //         400: PlacesJoiConfig.error
+            //     }
+            // }
         },
         handler: async (request, h) => {
             //le message renvoyé et le code http

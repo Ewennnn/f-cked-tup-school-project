@@ -1,20 +1,22 @@
 import Joi from "joi";
-import Localisation, { localisationModel } from "./Localisation.mjs";
 import Place, { placeModel } from "./place.mjs";
 import Coordinates from "./Coordinates.mjs";
 
 export const placesExportModel = Joi.object({
-//   id: Joi.string().required(),
+  id: Joi.string().required(),
   name: Joi.string().required(),
-//   location: localisationModel.required(),
-//   rating: Joi.number().required(),
-//   types: Joi.array().items(Joi.string()).required(),
-//   user_rating_total: Joi.number().required(),
-//   vicinity: Joi.string().required(),
+  location: Joi.object({
+    latitude: Joi.number(),
+    longitude: Joi.number()
+  }).required(),
+  rating: Joi.number().required(),
+  types: Joi.array().items(Joi.string()).required(),
+  user_rating_total: Joi.number().required(),
+  vicinity: Joi.string().required(),
 });
 
 export default class PlacesExport {
-  id;
+  place_id;
   name;
   location;
   rating;
@@ -24,7 +26,7 @@ export default class PlacesExport {
 
   constructor(obj) {
     try {
-      this.id = obj.place_id;
+      this.place_id = obj.place_id;
       this.name = obj.name;
       this.location = new Coordinates({
         latitude: obj.geometry.location.lat,
@@ -36,7 +38,7 @@ export default class PlacesExport {
       this.vicinity = obj.vicinity;
     } catch (e) {
       if (e instanceof TypeError) {
-        this.localisation = obj.localisation;
+        this.location = obj.geometry.location;
         this.place = obj.place;
       }
     }

@@ -8,17 +8,8 @@ import inert from '@hapi/inert';
 import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'
 import { ports } from '../microServices.config.mjs';
-// import { placesExportModel } from './model/PlacesExport.mjs';
+import { placesExportModel } from './model/PlacesExport.mjs';
 
-const placesExportModel = Joi.object({
-      id: Joi.string().required(),
-      name: Joi.string().required(),
-    //   location: localisationModel.required(),
-      rating: Joi.number().required(),
-      types: Joi.array().items(Joi.string()).required(),
-      user_rating_total: Joi.number().required(),
-      vicinity: Joi.string().required(),
-    });
 
 const routes =[
     {
@@ -57,7 +48,10 @@ const routes =[
 
 const server = Hapi.server({
     port: ports.places,
-    host: 'localhost'
+    host: 'localhost',
+    debug: {
+        request: ['error']
+    }
 });
 
 server.route(routes);
@@ -88,6 +82,3 @@ process.on('unhandledRejection', (err) => {
     console.log(err);
     process.exit(1);
 });
-
-
-

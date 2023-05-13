@@ -250,7 +250,10 @@ const routes =[
 
 const server = Hapi.server({
     port: ports.users,
-    host: 'localhost'
+    host: 'localhost',
+    debug: {
+        request: ['error']
+    }
 });
 
 server.route(routes);

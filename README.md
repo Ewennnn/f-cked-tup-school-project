@@ -29,6 +29,7 @@ Un [script](pm2.sh) permettant de gérer nos multiples micro-services est dispon
 
 |Argument|Actions|
 |:--:|:--|
+|--init|Initialise tout le système backend du projet.</br>Installe toutes les dépendances et démarre tous les services avec **pm2**. |
 |--run nom-du-service|Execute tous les micro-services configurer dans le [fichier de configuration pm2](/ecosystem.config.js). <br/>Si le nom du service est spécifié, seul celui-ci est executé. |
 |--stop nom-du-service|Ferme tous les micro-services actuellement lancés par pm2.<br/>Si le nom du service est spécifié, seul celui-ci est arrêté.|
 |--restart nom-du-service|Redémarre tous les micro-services actuellement lancés par pm2.<br/>Si le nom du service est spécifié, seul celui-ci est redémarré.|

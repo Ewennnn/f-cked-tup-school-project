@@ -37,7 +37,11 @@ const routes = [
             }
         },
         handler: async (req, res) => {
-            return res.response(await locationController.findLocationByInsee(parseInt(req.params.code_insee)))
+            const resp = await locationController.findLocationByInsee(parseInt(req.params.code_insee))
+            if (resp.code) {
+                return res.response(resp).code(resp.code)
+            }
+            return res.response(resp)
         }
     },
     {
@@ -55,12 +59,16 @@ const routes = [
             response: {
                 status: {
                     200: locationModel,
-                    400: LocationJoiConfig.error
+                    400: LocationJoiConfig.error,
                 }
             }
         },
         handler: async (req, res) => {
-            return res.response(await locationController.findLocationByCoordinates(parseFloat(req.params.latitude), parseFloat(req.params.longitude)))
+            const resp = await locationController.findLocationByCoordinates(parseFloat(req.params.latitude), parseFloat(req.params.longitude))
+            if (resp.code) {
+                return res.response(resp).code(resp.code)
+            }
+            return res.response(resp)
         }
     }
 ]

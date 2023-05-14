@@ -2,6 +2,8 @@
 
 import fetch from 'node-fetch'
 import Location from '../model/Location.mjs'
+import CacheLocation from '../model/CacheLocation.mjs'
+import Coordinates from '../../micro-service_meteo/model/Coordinates.mjs'
 
 const CACHE = []
 
@@ -11,38 +13,62 @@ export const locationDao = {
         // Récupération des informations provenant du cache
         const fromCache = findInCache(infos)
         if (fromCache != null) {
-            console.log(`find ${fromCache.city} from cache !`)
-            return fromCache
+            console.log(`find ${fromCache.location.city} from cache !`)
+            return fromCache.location
         }
 
-        // Si l'information n'est pas présente dans le cache, on appel l'api et on ajoute la réponse au cache
+        // Si l'information n'est pas présente dans le cache, on appel le service extene
         const url = getURL(infos)
         const response = await fetch(url)
         const body = await response.json()
-        try {
-            // console.log(await response.json());
-            const data = new Location(body) 
-            CACHE.push(data)
-            return data
-        } catch (e) {
+        
+        // Retourne le code d'erreur du service contacté
+        if (body.code) {
             return body
         }
 
+        // On sérialise les données puis on ajoute cette nouvelle donée au cache
+        const data = new Location(body)
+        putInCache(data, infos)
+        console.log(CACHE);
+        return data
     }
 }
 
+// Ajoute dans le cache les informations d'une ville en prenant en compte les informations entrées dans l'URL
+function putInCache(data, infos) {
+    if (infos.code_insee) {
+        CACHE.push(new CacheLocation({
+            searched_coords: new Coordinates({
+                latitude: data.coords.latitude,
+                longitude: data.coords.longitude
+            }),
+            location: data
+        }))
+    } else if (infos.coords) {      // On spécifie les coordonnées entrée par l'utilisateur afin de la pas avoir à recontacter le service si ces mêmes coordonnées sont de nouveau entrés
+        CACHE.push(new CacheLocation({
+            searched_coords: new Coordinates({
+                latitude: infos.coords.latitude,
+                longitude: infos.coords.longitude
+            }),
+            location: data
+        }))
+    }
+}
+
+// Cherche et renvoie une donnée si elle a déjà été recherchée
 function findInCache(infos) {
     let cityInfos = null
     if (infos.code_insee) {
         CACHE.forEach(it => {
-            if (it.code_insee == infos.code_insee) {
+            if (it.location.code_insee == infos.code_insee) {
                 cityInfos = it
                 return
             }
         })
     } else if (infos.coords) {
         CACHE.forEach(it => {
-            if (it.coords.latitude == infos.coords.latitude && it.coords.longitude == infos.coords.longitude) {
+            if (it.searched_coords.latitude == infos.coords.latitude && it.searched_coords.longitude == infos.coords.longitude) {
                 cityInfos = it
                 return
             }
@@ -51,6 +77,7 @@ function findInCache(infos) {
     return cityInfos
 }
 
+// Génère l'URL du service à contacter en fonction de la route contacté
 function getURL(infos) {
     if (infos.code_insee) {
         return `http://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&insee=${infos.code_insee}`

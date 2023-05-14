@@ -10,16 +10,6 @@ import HapiSwagger from 'hapi-swagger'
 import { ports } from '../microServices.config.mjs';
 import { placesExportModel } from './model/PlacesExport.mjs';
 
-const placesExportModel = Joi.object({
-      id: Joi.string().required(),
-      name: Joi.string().required(),
-    //   location: localisationModel.required(),
-      rating: Joi.number().required(),
-      types: Joi.array().items(Joi.string()).required(),
-      user_rating_total: Joi.number().required(),
-      vicinity: Joi.string().required(),
-    });
-
 const routes =[
     {
         method: 'GET',

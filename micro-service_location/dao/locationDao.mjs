@@ -30,7 +30,6 @@ export const locationDao = {
         // On sérialise les données puis on ajoute cette nouvelle donée au cache
         const data = new Location(body)
         putInCache(data, infos)
-        console.log(CACHE);
         return data
     }
 }

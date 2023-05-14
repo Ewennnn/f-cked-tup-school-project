@@ -14,8 +14,8 @@ const routes = [
     {
         method: 'GET',
         path: '/',
-        handler: async (req, res) => {
-            return res.response("<h1>Welcome to location service</h1>")
+        handler: async (req, h) => {
+            return h.response("<h1>Welcome to location service</h1>")
         }
     },
     {
@@ -26,8 +26,13 @@ const routes = [
             tags: ["api"],
             validate: {
                 params: Joi.object({
-                    code_insee: Joi.number().required()
-                })
+                    code_insee: Joi.number().min(10000).max(99999).required()
+                }),
+                failAction: (request, h, err) => {
+                    console.error(`Requête entrante: ${request.method.toUpperCase()} ${request.url.pathname} ${JSON.stringify(request.params)}`);
+                    console.error(err.details)
+                    return h.response({code: err.output.statusCode, message: err.output.payload.message}).code(err.output.statusCode).takeover()
+                }
             },
             response: {
                 status: {
@@ -36,12 +41,12 @@ const routes = [
                 }
             }
         },
-        handler: async (req, res) => {
+        handler: async (req, h) => {
             const resp = await locationController.findLocationByInsee(parseInt(req.params.code_insee))
             if (resp.code) {
-                return res.response(resp).code(resp.code)
+                return h.response(resp).code(resp.code)
             }
-            return res.response(resp)
+            return h.response(resp).code(200)
         }
     },
     {
@@ -54,21 +59,27 @@ const routes = [
                 params: Joi.object({
                     latitude: Joi.number().min(-90).max(90).required(),
                     longitude: Joi.number().min(-180).max(180).required()
-                })
+                }),
+                failAction: (request, h, err) => {
+                    console.error(`Requête entrante: ${request.method.toUpperCase()} ${request.url.pathname} ${JSON.stringify(request.params)}`);
+                    console.error(err.details)
+                    return h.response({code: err.output.statusCode, message: err.output.payload.message}).code(err.output.statusCode).takeover()
+                }
             },
             response: {
                 status: {
                     200: locationModel,
                     400: LocationJoiConfig.error,
+                    404: LocationJoiConfig.error
                 }
             }
         },
-        handler: async (req, res) => {
+        handler: async (req, h) => {
             const resp = await locationController.findLocationByCoordinates(parseFloat(req.params.latitude), parseFloat(req.params.longitude))
             if (resp.code) {
-                return res.response(resp).code(resp.code)
+                return h.response(resp).code(resp.code)
             }
-            return res.response(resp)
+            return h.response(resp).code(200)
         }
     }
 ]
@@ -84,12 +95,11 @@ const server = Hapi.server({
 server.route(routes);
 
 export const init = async () => {
-
     await server.initialize();
     return server;
 };
 
-export  const start = async () => {
+export const start = async () => {
     await server.register([
         inert,
         vision,

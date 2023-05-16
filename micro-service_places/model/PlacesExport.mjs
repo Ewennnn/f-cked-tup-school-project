@@ -7,12 +7,11 @@ export const placesExportModel = Joi.object({
     latitude: Joi.number(),
     longitude: Joi.number()
   }).required(),
-  rating: Joi.number().required(),
+  rating: Joi.number().optional(),
   types: Joi.array().items(Joi.string()).required(),
   user_rating_total: Joi.number().required(),
   vicinity: Joi.string().required(),
 });
-
 export const arrayPlacesExportModel = Joi.array().items(placesExportModel)
 
 export default class PlacesExport {
@@ -25,6 +24,8 @@ export default class PlacesExport {
   vicinity;
 
   constructor(obj) {
+    console.log(obj);
+    
     this.place_id = obj.place_id;
     this.name = obj.name;
     this.location = {

@@ -1,4 +1,5 @@
 'use strict'
+import PlaceExport from '../model/PlaceExport.mjs'
 import PlacesExport from '../model/PlacesExport.mjs'
 import fetch from 'node-fetch'
 
@@ -20,12 +21,13 @@ export const placeDAO = {
     },
 
     // Récupère les détails sur un restaurant à partir de son place_id
-    findRestaurantDetails: async (placeId) => {
-        const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,reviews&key=${GOOGLE_MAPS_API_KEY}`
+    findRestaurantDetails: async (place_id) => {
+        const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place_id}&key=${GOOGLE_MAPS_API_KEY}`
         const response = await fetch(url)
         const data = await response.json()
         if (data.status === 'OK') {
-            return new PlacesExport(data.results)
+          // console.log(data.result);
+          return new PlaceExport(data.result)
         } else {
             throw new Error('Failed to fetch restaurant details')
         }

@@ -1,4 +1,5 @@
 'use strict'
+import PlacesExport from '../model/PlacesExport.mjs'
 import Place from '../model/place.mjs'
 import fetch from 'node-fetch'
 
@@ -19,8 +20,8 @@ export const placeDAO = {
       const response = await fetch(url)
       const data = await response.json()
       if (data.status === 'OK') {
-        // console.log(data.results);
-        return data.results
+        console.log(data.results);
+        return await data.results.map(it => new PlacesExport(it))
       } else {
         return {message: "error"}
       }

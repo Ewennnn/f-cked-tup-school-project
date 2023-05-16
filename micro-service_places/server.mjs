@@ -8,7 +8,7 @@ import inert from '@hapi/inert';
 import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'
 import { ports } from '../microServices.config.mjs';
-import { placesExportModel } from './model/PlacesExport.mjs';
+import { arrayPlacesExportModel } from './model/PlacesExport.mjs';
 
 const routes =[
     {
@@ -29,14 +29,19 @@ const routes =[
                     latitude: Joi.number().required(),
                     longitude: Joi.number().required(),
                     radius: Joi.number().integer().required()
-                }).description('Required format : /latitude/longitude/radius')
+                }).description('Required format : /latitude/longitude/radius'),
+                failAction: (request, h, err) => {
+                    console.error(`Requête entrante: ${request.method.toUpperCase()} ${request.url.pathname} ${JSON.stringify(request.params)}`);
+                    console.error(err.details)
+                    return h.response({code: err.output.statusCode, message: err.output.payload.message}).code(err.output.statusCode).takeover()
+                }
             },
-            // response: {
-            //     status: {
-            //         200: placesExportModel,
-            //         400: PlacesJoiConfig.error
-            //     }
-            // }
+            response: {
+                status: {
+                    200: arrayPlacesExportModel,
+                    400: PlacesJoiConfig.error
+                }
+            }
         },
         handler: async (request, h) => {
             //le message renvoyé et le code http

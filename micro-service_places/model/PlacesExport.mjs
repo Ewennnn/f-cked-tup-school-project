@@ -3,7 +3,7 @@ import Place, { placeModel } from "./place.mjs";
 import Coordinates from "./Coordinates.mjs";
 
 export const placesExportModel = Joi.object({
-  id: Joi.string().required(),
+  place_id: Joi.string().required(),
   name: Joi.string().required(),
   location: Joi.object({
     latitude: Joi.number(),
@@ -14,6 +14,8 @@ export const placesExportModel = Joi.object({
   user_rating_total: Joi.number().required(),
   vicinity: Joi.string().required(),
 });
+
+export const arrayPlacesExportModel = Joi.array().items(placesExportModel)
 
 export default class PlacesExport {
   place_id;
@@ -28,20 +30,22 @@ export default class PlacesExport {
     try {
       this.place_id = obj.place_id;
       this.name = obj.name;
-      this.location = new Coordinates({
+      this.location = {
         latitude: obj.geometry.location.lat,
         longitude: obj.geometry.location.lng,
-      });
+      };
       this.rating = obj.rating;
       this.types = obj.types;
       this.user_rating_total = obj.user_ratings_total;
       this.vicinity = obj.vicinity;
     } catch (e) {
-      if (e instanceof TypeError) {
-        this.location = obj.geometry.location;
-        this.place = obj.place;
-      }
+      // if (e instanceof TypeError) {
+      //   this.location = obj.geometry.location;
+      //   this.place = obj.place;
+      // }
     }
+
+    console.log(obj.place_id);
   }
 
   json() {

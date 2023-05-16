@@ -1,8 +1,8 @@
 'use strict'
 
-import fetch from "node-fetch";
 import WeatherExport from "../model/WeatherExport.mjs";
 import CacheWeather from "../model/CacheWeather.mjs";
+import fetchUsingAgent from "../../microServices.config.mjs";
 
 const concept_meteo_api_url = "https://api.meteo-concept.com/api/forecast/daily/periods?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&insee="
 const test_meteo_api_url = "http://51.178.30.150/api/meteo/test"
@@ -46,7 +46,7 @@ export const weatherDao = {
             return new WeatherExport(CACHE[cacheIndex])
         }
         // Sinon récupération de données auprès de l'API Météo-Concept
-        const response = await fetch(concept_meteo_api_url + String(code_insee))
+        const response = await fetchUsingAgent(concept_meteo_api_url + String(code_insee))
         // const response = await fetch(test_meteo_api_url)
         const content = await response.json()   // Conversion en un objet de la réponse
         const data = new WeatherExport(content) // Création de l'entité de données

@@ -24,8 +24,6 @@ export default class PlacesExport {
   vicinity;
 
   constructor(obj) {
-    console.log(obj);
-    
     this.place_id = obj.place_id;
     this.name = obj.name;
     this.location = {

@@ -1,9 +1,9 @@
 'use strict'
 
-import fetch from 'node-fetch'
 import Location from '../model/Location.mjs'
 import CacheLocation from '../model/CacheLocation.mjs'
 import Coordinates from '../../micro-service_meteo/model/Coordinates.mjs'
+import fetchUsingAgent from '../../microServices.config.mjs'
 
 const CACHE = []
 
@@ -11,7 +11,7 @@ export const locationDao = {
     findCity : async (infos) => {
 
         // Récupération des informations provenant du cache
-        const fromCache = findInCache(infos)
+        const fromCache = await findInCache(infos)
         if (fromCache != null) {
             console.log(`find ${fromCache.location.city} from cache !`)
             return fromCache.location
@@ -19,9 +19,9 @@ export const locationDao = {
 
         // Si l'information n'est pas présente dans le cache, on appel le service extene
         const url = getURL(infos)
-        const response = await fetch(url)
+        // console.log(await fetchUsingAgent("https://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&insee=44109"));
+        const response = await fetchUsingAgent(url)
         const body = await response.json()
-        
         // Retourne le code d'erreur du service contacté
         if (body.code) {
             return body
@@ -79,8 +79,8 @@ function findInCache(infos) {
 // Génère l'URL du service à contacter en fonction de la route contacté
 function getURL(infos) {
     if (infos.code_insee) {
-        return `http://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&insee=${infos.code_insee}`
+        return `https://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&insee=${infos.code_insee}`
     } else if (infos.coords) {
-        return `http://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&latlng=${infos.coords.latitude},${infos.coords.longitude}`
+        return `https://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&latlng=${infos.coords.latitude},${infos.coords.longitude}`
     }
 }

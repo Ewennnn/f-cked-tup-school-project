@@ -36,8 +36,6 @@ export default class PlaceExport {
       photo_reference: photo.photo_reference,
       html_attributions: photo.html_attributions
     }))
-
-    console.log(this);
   }
 
   json() {

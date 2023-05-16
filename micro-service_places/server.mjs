@@ -47,6 +47,34 @@ const routes =[
             //le message renvoyé et le code http
             return h.response(await placeController.findRestaurantsByLocation({lat: parseFloat(request.params.latitude), lng: parseFloat(request.params.longitude)}, parseInt(request.params.radius)))
         }
+    },
+    {
+        method: 'GET',
+        path: '/restaurants/{place_id}',
+        options: {
+            description: 'Get the specified restaurant',
+            tags: ['api'],
+            validate: {
+                params: Joi.object({
+                    place_id: Joi.number().integer().required()
+                }).description('Required format : /latitude/longitude/radius'),
+                failAction: (request, h, err) => {
+                    console.error(`Requête entrante: ${request.method.toUpperCase()} ${request.url.pathname} ${JSON.stringify(request.params)}`);
+                    console.error(err.details)
+                    return h.response({code: err.output.statusCode, message: err.output.payload.message}).code(err.output.statusCode).takeover()
+                }
+            },
+            response: {
+                status: {
+                    200: arrayPlacesExportModel,
+                    400: PlacesJoiConfig.error
+                }
+            }
+        },
+        handler: async (request, h) => {
+            //le message renvoyé et le code http
+            return h.response(await placeController.findRestaurantsByLocation({lat: parseFloat(request.params.latitude), lng: parseFloat(request.params.longitude)}, parseInt(request.params.radius)))
+        }
     }
 ]
 

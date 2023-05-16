@@ -1,17 +1,8 @@
 'use strict'
 import PlacesExport from '../model/PlacesExport.mjs'
-import Place from '../model/place.mjs'
 import fetch from 'node-fetch'
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyCbMInaYLcbo9HZzZ4Eg3kBxkz2lnWO1N0'
-
-//pour simuler notre bd
-// class Places {
-//     places = []
-// }
-
-//pas de bd uniquement en mémoire
-const model = new Place()
 
 export const placeDAO = {
     // Récupère les informations sur les restaurants dans un rayon donné autour d'une localisation
@@ -20,7 +11,7 @@ export const placeDAO = {
       const response = await fetch(url)
       const data = await response.json()
       if (data.status === 'OK') {
-        console.log(data.results);
+        // console.log(data.results);
         return await data.results.map(it => new PlacesExport(it))
       } else {
         return {message: "error"}
@@ -34,7 +25,7 @@ export const placeDAO = {
         const response = await fetch(url)
         const data = await response.json()
         if (data.status === 'OK') {
-            return data.results
+            return new PlacesExport(data.results)
         } else {
             throw new Error('Failed to fetch restaurant details')
         }

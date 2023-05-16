@@ -1,6 +1,4 @@
 import Joi from "joi";
-import Place, { placeModel } from "./place.mjs";
-import Coordinates from "./Coordinates.mjs";
 
 export const placesExportModel = Joi.object({
   place_id: Joi.string().required(),
@@ -27,25 +25,16 @@ export default class PlacesExport {
   vicinity;
 
   constructor(obj) {
-    try {
-      this.place_id = obj.place_id;
-      this.name = obj.name;
-      this.location = {
-        latitude: obj.geometry.location.lat,
-        longitude: obj.geometry.location.lng,
-      };
-      this.rating = obj.rating;
-      this.types = obj.types;
-      this.user_rating_total = obj.user_ratings_total;
-      this.vicinity = obj.vicinity;
-    } catch (e) {
-      // if (e instanceof TypeError) {
-      //   this.location = obj.geometry.location;
-      //   this.place = obj.place;
-      // }
-    }
-
-    console.log(obj.place_id);
+    this.place_id = obj.place_id;
+    this.name = obj.name;
+    this.location = {
+      latitude: obj.geometry.location.lat,
+      longitude: obj.geometry.location.lng,
+    };
+    this.rating = obj.rating;
+    this.types = obj.types;
+    this.user_rating_total = obj.user_ratings_total;
+    this.vicinity = obj.vicinity;
   }
 
   json() {

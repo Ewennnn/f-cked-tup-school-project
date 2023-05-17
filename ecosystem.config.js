@@ -18,7 +18,7 @@ module.exports = {
     script : "./micro-service_users/startServer.mjs",
     watch: ["./micro-service_users"],
     watch_delay: 1000,
-    ignore_watch: ["node_modules", "./micro-service_users/node_modules", ".git", "./micro-service_users/prisma"]
+    ignore_watch: ["node_modules", "./micro-service_users/node_modules", ".git", "./micro-service_users/prisma/data"]
   },
   {
     name: "ms-location",
@@ -26,6 +26,13 @@ module.exports = {
     watch: ["./micro-service_location"],
     watch_delay: 1000,
     ignore_watch: ["node_modules", "./micro-service_location/node_modules", ".git"]
+  },
+  {
+    name: "WEB",
+    script: "./website/SAE/run.sh",
+    watch: ["./website/SAE/index.html", "./website/SAE/src", "./website/SAE/public"],
+    watch_delay: 1000,
+    ignore_watch: ["node_modules", "./website/SAE/node_modules", ".git"]
   }
 ]
 }

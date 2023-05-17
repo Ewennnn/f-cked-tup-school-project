@@ -1,5 +1,7 @@
 #!/bin/bash
 # Récupération des arguments
+shopt -s expand_aliases
+
 arg=$1
 name=$2
 if [[ $3 ]]; then
@@ -32,6 +34,13 @@ if [[ $arg == "--init" ]]; then
     echo -e "\n========== Installation de $(tput bold)ms-users$(tput sgr0) =========="
     cd ../micro-service_users
     npm i
+    if [[ ! -f ./prisma/data/myDB.db ]]; then
+        echo -e "\n\t$(tput bold)Création de la base de données$(tput sgr0)"
+        ./node_modules/.bin/prisma generate
+        ./node_modules/.bin/prisma db push
+    fi
+    echo -e "\n\t$(tput bold)Ajout d'utilisateurs$(tput sgr0)"
+    node testDao.mjs
 
     # Lancement des micro-services
     echo -e "\n========== $(tput bold)Démarrage des micro-services$(tput sgr0) =========="
@@ -40,7 +49,6 @@ if [[ $arg == "--init" ]]; then
 fi
 
 # Création de l'alias pour le script
-shopt -s expand_aliases
 alias pm2='./node_modules/.bin/pm2'
 
 if [[ $arg == "--run" ]]; then

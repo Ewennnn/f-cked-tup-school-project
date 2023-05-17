@@ -15,7 +15,7 @@ const model = new Favorites()
 export const favorisDao = {
         //tous les utilisteurs
         findAll : async() => (
-            await prisma.favorite.findMany()
+            await prisma.favorite.findMany({include : {users : true}})
         ).map(elt => new Favorite(elt)),
 
         //ajout un utilisateur

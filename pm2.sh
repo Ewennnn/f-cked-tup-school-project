@@ -39,8 +39,11 @@ if [[ $arg == "--init" ]]; then
         ./node_modules/.bin/prisma generate
         ./node_modules/.bin/prisma db push
     fi
-    echo -e "\n\t$(tput bold)Ajout d'utilisateurs$(tput sgr0)"
-    node testDao.mjs
+    if [[ $name == "--push-users" ]]; then
+        echo -e "\n\t$(tput bold)Ajout d'utilisateurs$(tput sgr0)"
+        node testDao.mjs
+        unset name
+    fi
 
     # Lancement des micro-services
     echo -e "\n========== $(tput bold)Démarrage des micro-services$(tput sgr0) =========="

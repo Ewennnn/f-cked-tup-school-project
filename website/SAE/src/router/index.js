@@ -3,6 +3,7 @@ import IndexView from '../views/IndexVue.vue'
 import RegisterVue from '../views/RegisterVue.vue'
 
 const router = createRouter({
+  mode: 'history',
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {

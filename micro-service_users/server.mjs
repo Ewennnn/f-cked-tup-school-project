@@ -15,8 +15,7 @@ const joiFavorite = Joi.object({
     id: Joi.number().integer().min(1).required(),
     userId : Joi.string(),
     date: Joi.date(),
-    activite : Joi.string(),
-    ville : Joi.string()
+    placeId : Joi.string()
 })
 
 const joiUser = Joi.object({
@@ -49,13 +48,13 @@ const routes =[
             response: {
                 status: {
                     // 200: Joi.string()
-                    201 : Joi.array().items(joiUserWithFavoris).description("un tableau de User")
+                    200 : Joi.array().items(joiUserWithFavoris).description("un tableau de User")
                 }
             }
         },
         handler: async (request, h) => {
             //le message renvoyé et le code http
-            return h.response(await userController.findAll()).code(200)
+            return h.response(await userController.findAllWithoutSalt()).code(200)
         }
     },
     {
@@ -66,19 +65,27 @@ const routes =[
         options: {
             description: 'Retourne l utilisateur qui a le login donné en paramètre',
             tags: ["api"],
+            validate: {
+                params: Joi.object({
+                    login: Joi.string().required()
+                })
+            },
             response: {
                 status: {
-                    200: Joi.array().items(joiUserWithFavoris).description("un User qui a le login qu on lui a passé en paramètre"),
-                    400: UserJoiConfig.error
+                    200: joiUserWithFavoris.description("un User qui a le login qu on lui a passé en paramètre"),
+                    404: UserJoiConfig.error
                 }
             }
         },
         handler: async (request, h) => {
-            const user = await userController.findByLogin(request.params.login)
-            if (user!=null)
-                return h.response(user).code(200)
-            else
-                return h.response({message: 'not found'}).code(404)
+            try {
+                const user = await userController.findByLogin(request.params.login)
+                delete user.salt
+                if (user!=null)
+                    return h.response(user).code(200)
+            } catch (e) {
+                return h.response({message: "User not found", code: 404}).code(404)
+            }
         }
     },
     {
@@ -110,27 +117,22 @@ const routes =[
             tags: ["api"],
             response: {
                 status: {
-                    200: Joi.array().items(joiUser).description("Crée un User"),
-                    400 : Joi.object({
-                        code: Joi.number().required().description("Code of returned error"),
-                        message: Joi.string().required().description("Error message")
-                    }).description("Le user existe déjà"),
-                    500: UserJoiConfig.error
+                    200: joiUserWithFavoris.description("Crée un User"),
+                    400 : UserJoiConfig.error.description("Le user existe déjà"),
                 }
             }
         },
         handler: async (request, h) => {
             try{
-            //Le body est accessible via request.payload
-            const param = request.payload
-            const userToAdd = new User(param)
-            const user = await userController.save(userToAdd)
-            if (user!=null)
-                return h.response(user).code(201)
-            else
-                return h.response({message: 'already exist'}).code(400)
-            }catch(e){
-                return h.response({message: e, code: 500}).code(500)
+                //Le body est accessible via request.payload
+                const param = request.payload
+                const userToAdd = new User(param)
+                const user = await userController.save(userToAdd)
+                delete user.salt
+                if (user!=null)
+                    return h.response(user).code(200)
+            } catch (e) {
+                return h.response({message: "already exist", code: 400}).code(400)
             }
         }
         
@@ -173,27 +175,50 @@ const routes =[
     },
     {
         method: 'DELETE',
+        path: '/user',
+        options: {
+            description: 'Supprime tous les utilisateurs de la base',
+            tags: ['api'],
+            response: {
+                status: {
+                    202: Joi.object({
+                        count: Joi.number().min(0).required()
+                    })
+                }
+            }
+        },
+        handler: async (request, h) => {
+            return h.response(await userController.deleteAll()).code(200)
+        }
+    },
+    {
+        method: 'DELETE',
         path: '/user/{login}',
         options: {
             description: 'Supprime l utilisateur qui a le login en paramètre',
             tags: ["api"],
             response: {
                 status: {
-                    200: Joi.array().items(joiUserWithFavoris).description("un User qui a le login qu on lui a passé en paramètre"),
-                    400: UserJoiConfig.error
+                    202: joiUserWithFavoris.description("un User qui a le login qu on lui a passé en paramètre"),
+                    404: UserJoiConfig.error
                 }
             },
             validate: {
-                payload: Joi.object({ login : Joi.string().required()})
+                params: Joi.object({ 
+                    login : Joi.string().required()
+                })
             }
         },
         handler: async (request, h) => {
 
-            const user = await userController.deleteByLogin(request.params.login)
-            if (user!=null)
-                return h.response(user).code(200)
-            else
-                return h.response({message: 'not found'}).code(404)
+            try {
+                const user = await userController.deleteByLogin(request.params.login)
+                delete user.salt
+                if (user!=null)
+                    return h.response(user).code(202)
+            } catch (e) {
+                return h.response({message: e.meta.cause, code: 404}).code(404)
+            }
         }
     },
     {
@@ -231,19 +256,22 @@ const routes =[
                 }
             },
             validate: {
-                payload: Joi.object({ login : Joi.string().required(), user : joiUser.required()})
+                params: Joi.object({
+                    login: Joi.string().required()
+                }),
+                payload: Joi.object({
+                    user : joiUser.required()
+                })
             }
         },
         handler: async (request, h) => {
-            try{
-            const user = await userController.update(request.params.login,request.payload)
+            console.log(request.params.login);
+            console.log(request.payload.user);
+            const user = await userController.update(request.params.login,request.payload.user)
             if (user!=null)
                 return h.response(user).code(200)
             else
-                return h.response({message: 'not found'}).code(400)
-            }catch(e){
-                return h.response({message: "error", code: 500}).code(500)
-            }
+                return h.response({message: 'not found', code: 400}).code(400)
         }
     }
 ]

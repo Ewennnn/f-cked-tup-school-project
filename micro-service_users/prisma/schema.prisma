@@ -26,8 +26,8 @@ model Meteo {
 model User {
   // id Int @default(autoincrement())
   login    String     @id
-  password String     @unique
-  salt     String     @unique
+  password String     
+  salt     String     
   email    String     @unique
   favorites Favorite[] 
 }

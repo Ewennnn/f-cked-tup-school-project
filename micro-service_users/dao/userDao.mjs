@@ -72,9 +72,9 @@ export const userDao = {
             return elt == null ? null : new User(elt)
         },
         //Supprime tous les users ne renvoie rien
-        deleteUsers: async() => {await prisma
-            .user
-            .deleteMany()
+        deleteUsers: async() => {
+            await prisma.favorite.deleteMany()
+            return await prisma.user.deleteMany()
 
         },
         //supprime un utilisateur ne renvoie rien
@@ -102,9 +102,7 @@ export const userDao = {
                     data: param
                 })
     
-                const userAdded =
-    
-                    await userDao.findByLogin(user.login)
+                const userAdded = await userDao.findByLogin(user.login)
                 return userAdded
             } catch (e) {
                 return Promise.reject(e)

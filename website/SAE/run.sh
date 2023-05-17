@@ -5,6 +5,9 @@ if [[ $(pwd) != "*/website/SAE" ]]; then
     cd ./website/SAE
 fi
 
-npm i
+if [[ ! -f node_modules ]]; then
+    npm i
+fi
+
 npm run build
 ./node_modules/.bin/serve dist -l 3100

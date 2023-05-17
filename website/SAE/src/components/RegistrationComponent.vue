@@ -1,8 +1,9 @@
 <script setup>
+import { RouterLink } from 'vue-router';
 </script>
 
 <template>
-    <form class="form">
+    <div class="form">
     <p class="title">Créer ton compte ! </p>
     <p class="message">Plus qu'une étape pour profiter des meilleurs dates de ta région ! </p>
         <div class="flex">
@@ -18,17 +19,45 @@
     </label> 
         
     <label>
-        <input required="true" placeholder="" type="password" class="input">
+        <input required="true" placeholder="" type="password" class="input" v-model="password">
         <span>Mot de passe</span>
     </label>
     <label>
-        <input required="true" placeholder="" type="password" class="input">
-        <span>Confirmer le mot de passe</span>
+        <input required="true" placeholder="" type="password" class="input" v-model="confirmpassword" @input="checkPassword()">
+        <span v-if="checkPass == true">Confirmer le mot de passe</span>
+        <span v-else style="color: red;">Les mot de passe ne correspondent pas !</span>
     </label>
-    <button class="submit">Envoyer</button>
-    <p class="signin">Vous avez déjà un compte ? <a href="#">Signin</a> </p>
-</form>
+    <button class="submit" @click="submit()">Envoyer</button>
+    <p class="signin">Vous avez déjà un compte ? <RouterLink to="/" class="signin">Se connecter</RouterLink> </p>
+  </div>
 </template>
+
+<script>
+  export default {
+    data() {
+      return {
+        password: "",
+        confirmpassword: "",
+        checkPass: true
+      }
+    },
+    methods: {
+      checkPassword() {
+        if (this.password == this.confirmpassword) {
+          this.checkPass = true
+          console.log(this.confirmpassword)
+        }
+        else {
+          this.checkPass = false;
+          console.log(this.password);
+          console.log(this.confirmpassword)
+          
+        }
+      }
+    }
+  }
+
+</script>
 
 <style scoped>
 .form {
@@ -40,6 +69,7 @@
   padding: 20px;
   border-radius: 20px;
   position: relative;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .title {

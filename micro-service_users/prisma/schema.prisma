@@ -36,11 +36,6 @@ model Favorite {
   id        Int   @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [login])
   userId    String
-  // user     User     @relation(fields: [id], references: [login])
   date      DateTime
-  activite  String
-  ville     String
+  placeId   String
 }
-
-// manager     Profile   @relation(fields: [managerId], references: [user])
-// managerId   String

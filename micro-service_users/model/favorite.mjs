@@ -4,8 +4,7 @@ import User from "./user.mjs"
 export default class Favorite {
     id 
     date     
-    activite 
-    ville 
+    placeId 
 
     userId
        
@@ -14,8 +13,7 @@ export default class Favorite {
         if(obj.id)
             this.id = obj.id
         this.date = obj.date || Date()
-        this.activite = obj.activite || ""
-        this.ville = obj.ville || ""
+        this.placeId = obj.placeId || ""
         if(obj.userId){
             this.userId = obj.userId
         }

@@ -3,11 +3,11 @@ import assert from 'node:assert'
 import User from './model/user.mjs'
 import Favorite from './model/favorite.mjs'
 import {userDao} from './dao/userDao.mjs'
-import { favoriteDao } from './dao/favoriteDao.mjs'
+import { favorisDao } from './dao/favorisDao.mjs'
 
 
 
-await favoriteDao.deleteFavorite()
+await favorisDao.deleteFavoris()
 await userDao.deleteUsers()
 // let users = await userDao.findAll()
 // assert.deepStrictEqual(users,[])
@@ -16,8 +16,7 @@ await userDao.deleteUsers()
 
 const favoriteToInsert = new Favorite({
     date : new Date("2020-03-19T14:21:00+0200"),
-    activite : "restaurant",
-    ville : "Rennes"
+    placeId : "ChIJVzuqS6HuBUgRiH1RPUyBffg"
 })
 
 const userToInsert = new User({
@@ -90,7 +89,7 @@ favoris.userId = user.favorites[0].userId
 
 assert.deepStrictEqual([favoris], user.favorites)
 
-let listeFavoris = await favoriteDao.findAll()
+let listeFavoris = await favorisDao.findAll()
 
 /** Test :  est-ce-qu'il y a bien 2 Favoris dans la BDD au lieu de 1 */
 

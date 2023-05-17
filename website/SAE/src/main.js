@@ -5,7 +5,7 @@ import App from './App.vue'
 import router from './router'
 import { createVuestic } from "vuestic-ui";
 import "vuestic-ui/css";
-import { VueCookies } from 'vue3-cookies/dist/interfaces';
+import VueCookies from 'vue3-cookies'
 
 const app = createApp(App)
 

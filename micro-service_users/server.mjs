@@ -11,11 +11,6 @@ import vision from '@hapi/vision'
 import swagger from 'hapi-swagger'
 import { UserJoiConfig } from './joiConfig.mjs';
 
-const joiFavorite = Joi.object({
-    users : Joi.array().items(joiUser),
-    placeId : Joi.string()
-})
-
 const joiFavoriteAdd = Joi.object({
     date: Joi.date(),
     placeId : Joi.string().required()
@@ -25,6 +20,11 @@ const joiUser = Joi.object({
     login: Joi.string().required(),
     password: Joi.string().required(),
     email: Joi.string().required()
+})
+
+const joiFavorite = Joi.object({
+    users : Joi.array().items(joiUser),
+    placeId : Joi.string()
 })
 
 const joiUserWithFavoris = Joi.object({

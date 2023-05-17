@@ -1,13 +1,14 @@
 <script setup>
-
+import { useCookies } from "vue3-cookies";
 import { RouterLink } from 'vue-router';
+
 </script>
 
 <template>
-    <form class="form" >
+    <div class="form" >
     <p class="form-title">Connecte toi à ton compte !</p>
      <div class="input-container">
-       <input placeholder="Email" type="email">
+       <input placeholder="Email" type="email" v-model="email">
        <span>
          <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
            <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
@@ -15,7 +16,7 @@ import { RouterLink } from 'vue-router';
        </span>
    </div>
    <div class="input-container">
-       <input placeholder="Mot de passe" type="password">
+       <input placeholder="Mot de passe" type="password" v-model="password">
 
        <span>
          <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -24,19 +25,39 @@ import { RouterLink } from 'vue-router';
          </svg>
        </span>
      </div>
-      <button class="submit" type="submit">
+      <button class="submit" @click="connect()">
      Connection
    </button>
 
-   <p class="signup-link">
+   <p class="signup-text">
      Pas de compte ?
-     <RouterLink to="/register">Créer un compte</RouterLink>
+     <RouterLink to="/register" class="signup-link">Créer un compte</RouterLink>
    </p>
-</form>
+  </div>
 </template>
 
 <script>
-
+  export default {
+    setup() {
+    const { cookies } = useCookies();
+    return { cookies };
+  },
+  data() {
+    return {
+      email: "",
+      password: "",
+    }
+  },
+    methods: {
+      connect() {
+        if (this.cookies.get("token") != undefined) {
+          this.$router.push("/home")
+        } else {
+          console.log(this.password)
+        }
+      }
+    }
+}
 </script>
 
 <style scoped>
@@ -46,7 +67,7 @@ import { RouterLink } from 'vue-router';
   display: block;
   padding: 1rem;
   max-width: 350px;
-  border-radius: 0.5rem;
+  border-radius: 20px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
@@ -102,17 +123,27 @@ import { RouterLink } from 'vue-router';
   padding-bottom: 0.75rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-  background-color: #4F46E5;
+  background-color: royalblue;
   color: #ffffff;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
   width: 100%;
   border-radius: 0.5rem;
-  text-transform: uppercase;
+}
+
+.submit:hover {
+  background-color: rgb(56, 90, 194);
 }
 
 .signup-link {
+  color: royalblue;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-align: center;
+}
+
+.signup-text {
   color: #6B7280;
   font-size: 0.875rem;
   line-height: 1.25rem;

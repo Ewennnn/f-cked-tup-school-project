@@ -1,21 +1,17 @@
 'use strict'
 import User from "./user.mjs"
 
-export default class Favorite {
-    id 
-    date     
+export default class Favorite { 
     placeId 
-
-    userId
+    users
        
     constructor(obj) {
-        // Object.assign(this,obj)
-        if(obj.id)
-            this.id = obj.id
-        this.date = obj.date || Date()
         this.placeId = obj.placeId || ""
-        if(obj.userId){
-            this.userId = obj.userId
-        }
+        if (obj.users)
+            this.users = obj
+                .users
+                .map(user => new User(user))
+        else
+            this.users = []
     }
 }

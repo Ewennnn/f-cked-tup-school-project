@@ -24,7 +24,6 @@ model Meteo {
 }
 
 model User {
-  // id Int @default(autoincrement())
   login    String     @id
   password String     
   salt     String     
@@ -33,9 +32,6 @@ model User {
 }
 
 model Favorite {
-  id        Int   @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [login])
-  userId    String
-  date      DateTime
-  placeId   String
+  placeId   String  @id
+  users      User[]
 }

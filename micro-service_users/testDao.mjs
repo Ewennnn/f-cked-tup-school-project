@@ -15,7 +15,6 @@ await userDao.deleteUsers()
 // assert.equal(user, null)
 
 const favoriteToInsert = new Favorite({
-    date : new Date("2020-03-19T14:21:00+0200"),
     placeId : "ChIJVzuqS6HuBUgRiH1RPUyBffg"
 })
 
@@ -47,8 +46,7 @@ user = await userDao.addFavorites(userToInsert, favoriteToInsert)
 /** Test : le favoris a bien été rajouté à l'utilisateur */
 
 let favoris = {...favoriteToInsert}
-favoris.id = user.favorites[0].id
-favoris.userId = user.favorites[0].userId
+// favoris.users = user.favorites[0].users
 
 assert.deepStrictEqual([favoris], user.favorites)
 
@@ -94,3 +92,13 @@ let listeFavoris = await favorisDao.findAll()
 /** Test :  est-ce-qu'il y a bien 2 Favoris dans la BDD au lieu de 1 */
 
 assert.deepStrictEqual(2, listeFavoris.length)
+
+const favoriteToInsert2 = new Favorite({
+    date : new Date("2020-03-19T14:21:00+0200"),
+    placeId : "resto"
+})
+
+console.log("print");
+
+user = await userDao.addFavorites(userToInsert2, favoriteToInsert2)
+user = await userDao.addFavorites(userToInsert, favoriteToInsert2)

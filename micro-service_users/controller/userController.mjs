@@ -14,5 +14,6 @@ export const userController = {
     add:async (user) => userDao.add(user),
     save:async(user) => userDao.save(user),
     update: async (login, user) => userDao.update(login,user),
-    deleteAll: async () => userDao.deleteUsers()
+    deleteAll: async () => userDao.deleteUsers(),
+    addFavorites: async (user,favoris) => userDao.addFavorites(user,favoris)
 }

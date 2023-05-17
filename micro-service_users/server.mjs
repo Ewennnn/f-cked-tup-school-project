@@ -12,10 +12,13 @@ import swagger from 'hapi-swagger'
 import { UserJoiConfig } from './joiConfig.mjs';
 
 const joiFavorite = Joi.object({
-    id: Joi.number().integer().min(1).required(),
-    userId : Joi.string(),
-    date: Joi.date(),
+    users : Joi.array().items(joiUser),
     placeId : Joi.string()
+})
+
+const joiFavoriteAdd = Joi.object({
+    date: Joi.date(),
+    placeId : Joi.string().required()
 })
 
 const joiUser = Joi.object({
@@ -28,7 +31,9 @@ const joiUserWithFavoris = Joi.object({
     login: Joi.string().required(),
     password: Joi.string().required(),
     email: Joi.string().required(),
-    favorites : Joi.array().items(joiFavorite)
+    favorites : Joi.array().items( Joi.object({
+        placeId : Joi.string()
+    }))
 })
 
 const routes =[
@@ -251,7 +256,7 @@ const routes =[
             tags: ["api"],
             response: {
                 status: {
-                    200: Joi.array().items(joiUserWithFavoris).description("un User qui a le login qu on lui a passé en paramètre"),
+                    200: joiUserWithFavoris.description("un User qui a le login qu on lui a passé en paramètre"),
                     400: UserJoiConfig.error
                 }
             },
@@ -260,18 +265,58 @@ const routes =[
                     login: Joi.string().required()
                 }),
                 payload: Joi.object({
-                    user : joiUser.required()
+                    user : joiUserWithFavoris.required()
                 })
             }
         },
         handler: async (request, h) => {
-            console.log(request.params.login);
-            console.log(request.payload.user);
-            const user = await userController.update(request.params.login,request.payload.user)
-            if (user!=null)
+            try{
+                console.log(request.params.login);
+                console.log(request.payload.user);
+                const user = await userController.update(request.params.login,request.payload.user)
+                if(user == null){
+                    console.log("testttttttt");
+                }
+                delete user.salt
                 return h.response(user).code(200)
-            else
-                return h.response({message: 'not found', code: 400}).code(400)
+            }catch(e){
+                return h.response({message: 'not founds', code: 400}).code(400)
+            }  
+        }
+    },
+        {
+        method: 'PUT',
+        path: '/user/favorite/{login}',
+        options: {
+            description: 'rajoute un favoris à un utilisateur qui a le login en paramètre',
+            tags: ["api"],
+            response: {
+                status: {
+                    200: joiUserWithFavoris.description("un User qui a le login qu on lui a passé en paramètre"),
+                    400: UserJoiConfig.error
+                }
+            },
+            validate: {
+                params: Joi.object({
+                    login: Joi.string().required()
+                }),
+                payload: Joi.object({
+                    favoris : joiFavoriteAdd.required()
+                })
+            }
+        },
+        handler: async (request, h) => {
+            try{
+                console.log(request.params.login);
+                console.log(request.payload.favoris);
+                const login = request.params.login
+                const user = await userController.findByLogin(login)
+                const userModify = await userController.addFavorites(user, request.payload.favoris)
+                delete userModify.salt
+                return h.response(userModify).code(200) 
+            }catch(e){
+                return h.response({message: 'Ce favoris est déjà présent chez le user', code: 400}).code(400)
+            }
         }
     }
 ]

@@ -30,7 +30,7 @@ module.exports = {
   {
     name: "WEB",
     script: "./website/SAE/run.sh",
-    watch: ["./website/SAE/"],
+    watch: ["./website/SAE/index.html", "./website/SAE/src", "./website/SAE/public"],
     watch_delay: 1000,
     ignore_watch: ["node_modules", "./website/SAE/node_modules", ".git"]
   }

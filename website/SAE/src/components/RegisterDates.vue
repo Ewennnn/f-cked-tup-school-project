@@ -28,9 +28,9 @@ import { RouterLink } from 'vue-router';
      Connection
    </button>
 
-   <p class="signup-link">
+   <p class="signup-text">
      Pas de compte ?
-     <RouterLink to="/register">Créer un compte</RouterLink>
+     <RouterLink to="/register" class="signup-link">Créer un compte</RouterLink>
    </p>
 </form>
 </template>
@@ -46,7 +46,7 @@ import { RouterLink } from 'vue-router';
   display: block;
   padding: 1rem;
   max-width: 350px;
-  border-radius: 0.5rem;
+  border-radius: 20px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
@@ -102,17 +102,27 @@ import { RouterLink } from 'vue-router';
   padding-bottom: 0.75rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-  background-color: #4F46E5;
+  background-color: royalblue;
   color: #ffffff;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
   width: 100%;
   border-radius: 0.5rem;
-  text-transform: uppercase;
+}
+
+.submit:hover {
+  background-color: rgb(56, 90, 194);
 }
 
 .signup-link {
+  color: royalblue;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-align: center;
+}
+
+.signup-text {
   color: #6B7280;
   font-size: 0.875rem;
   line-height: 1.25rem;

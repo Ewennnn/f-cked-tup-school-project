@@ -307,7 +307,7 @@ const routes =[
     },
         {
         method: 'PUT',
-        path: '/favorite/{login}',
+        path: '/favoris/{login}',
         options: {
             description: 'rajoute un favoris à un utilisateur qui a le login en paramètre',
             tags: ["api"],
@@ -341,7 +341,7 @@ const routes =[
     },
     {
         method: 'PUT',
-        path: '/favorite/delete/{login}',
+        path: '/favoris/delete/{login}',
         options: {
             description: 'supprime un favoris à un utilisateur qui a le login en paramètre',
             tags: ["api"],

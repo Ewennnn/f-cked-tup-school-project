@@ -4,7 +4,7 @@
   "description": "",
   "main": "startServer.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha testPlaces.mjs"
   },
   "author": "",
   "license": "ISC",
@@ -12,8 +12,11 @@
     "@hapi/hapi": "^21.3.2",
     "@hapi/inert": "^7.1.0",
     "@hapi/vision": "^7.0.1",
+    "chai": "^4.3.7",
     "hapi-swagger": "^16.0.1",
+    "haversine-distance": "^1.2.1",
     "joi": "^17.9.1",
+    "mocha": "^10.2.0",
     "node-fetch": "^3.3.1"
   }
 }

@@ -4,6 +4,26 @@ import { RouterLink } from 'vue-router';
 
 </script>
 
+<script>
+  export default {
+    setup() {
+    const { cookies } = new useCookies();
+    return { cookies };
+  },
+  data() {
+    return {
+      email: "",
+      password: "",
+    }
+  },
+    methods: {
+      connect() {
+        this.$router.push("/home")
+      }
+    }
+}
+</script>
+
 <template>
     <div class="form" >
     <p class="form-title">Connecte toi à ton compte !</p>
@@ -33,32 +53,11 @@ import { RouterLink } from 'vue-router';
      Pas de compte ?
      <RouterLink to="/register" class="signup-link">Créer un compte</RouterLink>
    </p>
+   
   </div>
 </template>
 
-<script>
-  export default {
-    setup() {
-    const { cookies } = useCookies();
-    return { cookies };
-  },
-  data() {
-    return {
-      email: "",
-      password: "",
-    }
-  },
-    methods: {
-      connect() {
-        if (this.cookies.get("token") != undefined) {
-          this.$router.push("/home")
-        } else {
-          console.log(this.password)
-        }
-      }
-    }
-}
-</script>
+
 
 <style scoped>
 

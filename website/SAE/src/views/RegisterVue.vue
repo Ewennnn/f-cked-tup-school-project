@@ -1,10 +1,10 @@
 <script setup>
   import RegistrationComponent from "../components/RegistrationComponent.vue"
+
 </script>
 
 <template>
     <RegistrationComponent />
-
 </template>
 
 

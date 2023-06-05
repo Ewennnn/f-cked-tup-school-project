@@ -65,13 +65,17 @@ export const userDao = {
                 return Promise.reject(e)
             }
         },
-            //renvoie la liste des favoris de l'utilisateur
-    addFavorites: async (userAdded, favoritesToAdd) => {
+            //renvoie la liste des favoris de l'utilisateur.
+    addFavorites: async (user, favoritesToAdd) => {
         try {
-
-
-            delete favoritesToAdd.users
-            userAdded.favorites.push(favoritesToAdd)
+            // Permet de savoir si le favoris est déjà présent chez le user.
+            const resultat = user.favorites.find(favoris => favoris.placeId == favoritesToAdd.placeId)
+            if (resultat != undefined) {
+                console.log("ICI");
+                return Promise.reject(e)
+            }
+            // delete favoritesToAdd.users
+            user.favorites.push(favoritesToAdd)
             const res = await  prisma.user.update ({
                 data : {
                     favorites: {
@@ -85,7 +89,7 @@ export const userDao = {
                     }
                 }},
                 where : {
-                    login : userAdded.login
+                    login : user.login
                 },
                 include : {
                     favorites : true
@@ -96,9 +100,29 @@ export const userDao = {
             return Promise.reject(e)
         }
     },
+    //Permet de supprimer le lien entre un Favorite et un User
+    deleteFavorites: async (user, favoritesToDelete) => {
+        try {
+        const updatedUser = await prisma.user.update({
+            where: { login: user.login },
+            data: {
+              favorites: {
+                disconnect: { placeId: favoritesToDelete.placeId }
+              }
+            },
+            include: {
+                favorites : true
+            }
+          });
+            return updatedUser
+        } catch (e) {
+            console.log(e);
+            return Promise.reject(e)
+        }
+    },
     
         //Modifie un utilisateur
-        //premd en paramètre le login du user à modifier et la modification
+        //prend en paramètre le login du user à modifier et la modification
         //renvoie le user modifier ou null
         update: async(login, user) => {
             if(user.password){

@@ -116,7 +116,7 @@ let listeFavoris = await favorisDao.findAll()
 assert.deepStrictEqual(1, listeFavoris.length)
 
 const favoriteToInsert2 = new Favorite({
-    date : new Date("2020-03-19T14:21:00+0200"),
+    // date : new Date("2020-03-19T14:21:00+0200"),
     placeId : "resto"
 })
 

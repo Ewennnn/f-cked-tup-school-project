@@ -46,6 +46,7 @@ user = await userDao.addFavorites(userToInsert, favoriteToInsert)
 /** Test : le favoris a bien été rajouté à l'utilisateur */
 
 let favoris = {...favoriteToInsert}
+delete favoris.users
 // favoris.users = user.favorites[0].users
 
 assert.deepStrictEqual([favoris], user.favorites)
@@ -67,8 +68,6 @@ assert.deepStrictEqual(user, userToInsert2)
 assert.rejects(userDao.add(userToInsert2))
 
 users = await userDao.findAll()
-
-console.log(users);
 
 /** Test : Si il y a bien les 2 utilisateurs */
 

@@ -12,6 +12,13 @@ const routes =[
             return h.response('<h1>Welcome to Best-Dates API !<h1>').code(200)
         }
     },
+    {
+        method: 'GET',
+        path: '/generate/{ville}',
+        handler: async (request, h) => {
+            return h.response(request.params.ville).code(200)
+        }
+    }
 ]
 
 const server = Hapi.server({

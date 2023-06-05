@@ -30,13 +30,13 @@
   import { useColors } from "vuestic-ui";
   import ButtonDates from './ButtonDates.vue';
   
-  const { currentPresetName } = useColors();
+  const { currentPresetName } = useColors(  );
   
   const connected = true;
   const NavbarColors = computed(() => {
     if (currentPresetName.value === "light") {
       return {
-        color: "#ffcccc",
+        color: "#FF6F6F",
         textColor: "#BAFFC5",
       };
     } else {
@@ -51,13 +51,12 @@
   <style scoped>
 .main-container {
   display: flex;
-  color: red;
-  justify-content: center; /* Ajout de cette ligne */
-  align-items: center; /* Ajout de cette ligne */
+  justify-content: center;  /*Ajout de cette ligne*/ 
+  align-items: center; /*Ajout de cette ligne*/
 }
 .navbar {
-    width: 95vw;
-    max-width: 100%;
+    width: 70vw;
+    /* max-width: 100%; */
     display: flex;
     justify-content: space-between;
   }

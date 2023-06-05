@@ -8,9 +8,9 @@
     <button class="buttonDate">{{ name }}</button>
 </template>
 
-<style>
+<style scoped>
 .buttonDate {
-    --color: #0077ff;
+    --color: #FF6F6F;
     font-family: inherit;
     /* display: inline-block; */
     width: 6em;
@@ -37,6 +37,7 @@
 
 .buttonDate:hover {
   color: white;
+  border: 2px solid white;
 }
 
 .buttonDate:before {

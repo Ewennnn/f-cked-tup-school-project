@@ -53,5 +53,10 @@ export default class User {
         this.password = crypt.hash
         this.salt = crypt.salt
     }
+
+    static checkPassword(password,salt){
+        let hash = bcrypt.hashSync(password, salt)
+        return hash
+    }
         
 }

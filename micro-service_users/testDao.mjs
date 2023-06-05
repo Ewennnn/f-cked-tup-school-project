@@ -68,6 +68,8 @@ assert.rejects(userDao.add(userToInsert2))
 
 users = await userDao.findAll()
 
+console.log(users);
+
 /** Test : Si il y a bien les 2 utilisateurs */
 
 /** Problème avec le favoris de l'utilisateur 1 */

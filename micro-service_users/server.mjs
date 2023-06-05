@@ -18,7 +18,7 @@ const joiFavoriteAdd = Joi.object({
 
 const joiUser = Joi.object({
     login: Joi.string().required(),
-    password: Joi.string().required(),
+    // password: Joi.string().required(),
     email: Joi.string().required()
 })
 
@@ -29,7 +29,7 @@ const joiFavorite = Joi.object({
 
 const joiUserWithFavoris = Joi.object({
     login: Joi.string().required(),
-    password: Joi.string().required(),
+    // password: Joi.string().required(),
     email: Joi.string().required(),
     favorites : Joi.array().items( Joi.object({
         placeId : Joi.string()
@@ -59,25 +59,30 @@ const routes =[
         },
         handler: async (request, h) => {
             //le message renvoyé et le code http
-            return h.response(await userController.findAllWithoutSalt()).code(200)
+            let users =  await userController.findAllWithoutSalt()
+            users.forEach(it => {
+                delete it.password
+            })
+            return h.response(users).code(200)
         }
     },
     {
         method: 'GET',
         //une route avec un parametre
         //utilisable avec request.params.login
-        path: '/user/{login}',
+        path: '/user/{login}/{password}',
         options: {
             description: 'Retourne l utilisateur qui a le login donné en paramètre',
             tags: ["api"],
             validate: {
                 params: Joi.object({
-                    login: Joi.string().required()
+                    login: Joi.string().required(),
+                    password : Joi.string().required()
                 })
             },
             response: {
                 status: {
-                    200: joiUserWithFavoris.description("un User qui a le login qu on lui a passé en paramètre"),
+                    200: joiUserWithFavoris.description("un User qui a le login et password qu on lui a passé en paramètre"),
                     404: UserJoiConfig.error
                 }
             }
@@ -85,9 +90,18 @@ const routes =[
         handler: async (request, h) => {
             try {
                 const user = await userController.findByLogin(request.params.login)
-                delete user.salt
-                if (user!=null)
-                    return h.response(user).code(200)
+                // delete user.salt
+                if (user!=null){
+                    const passwordAuth = User.checkPassword(request.params.password, user.salt)
+                    if(user.password == passwordAuth){
+                        delete user.salt
+                        delete user.password
+                        delete user.favorites.forEach(favoris => {
+                            delete favoris.users
+                        });
+                        return h.response(user).code(200)
+                    }
+                }
             } catch (e) {
                 return h.response({message: "User not found", code: 404}).code(404)
             }
@@ -101,13 +115,11 @@ const routes =[
             tags: ["api"],
             response: {
                 status: {
-                    // 200: Joi.string()
                     200 : Joi.array().items(joiFavorite).description("un tableau de favoris")
                 }
             }
         },
         handler: async (request, h) => {
-            //le message renvoyé et le code http
             return h.response(await favorisController.findAll()).code(200)
         }
     },
@@ -134,6 +146,7 @@ const routes =[
                 const userToAdd = new User(param)
                 const user = await userController.save(userToAdd)
                 delete user.salt
+                delete user.password
                 if (user!=null)
                     return h.response(user).code(200)
             } catch (e) {
@@ -219,6 +232,7 @@ const routes =[
             try {
                 const user = await userController.deleteByLogin(request.params.login)
                 delete user.salt
+                delete user.password
                 if (user!=null)
                     return h.response(user).code(202)
             } catch (e) {
@@ -278,6 +292,7 @@ const routes =[
                     console.log("testttttttt");
                 }
                 delete user.salt
+                delete user.password
                 return h.response(user).code(200)
             }catch(e){
                 return h.response({message: 'not founds', code: 400}).code(400)
@@ -313,6 +328,7 @@ const routes =[
                 const user = await userController.findByLogin(login)
                 const userModify = await userController.addFavorites(user, request.payload.favoris)
                 delete userModify.salt
+                delete userModify.password
                 return h.response(userModify).code(200) 
             }catch(e){
                 return h.response({message: 'Ce favoris est déjà présent chez le user', code: 400}).code(400)

@@ -58,22 +58,22 @@ fi
 # Création de l'alias pour le script
 alias pm2='./node_modules/.bin/pm2'
 
-if [[ $arg == "--run" || $arg == "run" || $arg == "--start" || $arg == "start"]]; then
+if [ $arg == "--run" ] || [ $arg == "run" ] || [ $arg == "--start" ] || [ $arg == "start" ]; then
     if [[ $2 ]]; then
         pm2 start ${name}
     else
         pm2 start ecosystem.config.js
     fi
-elif [[ $arg == "--restart" || $arg == "restart" ]]; then
+elif [ $arg == "--restart" ] || [ $arg == "restart" ]; then
     pm2 restart ${name}
-elif [[ $arg == "--stop" || $arg == "stop" ]]; then
+elif [ $arg == "--stop" ] || [ $arg == "stop" ]; then
     pm2 stop ${name}
-elif [[ $arg == "--status" || $arg == "status" ]]; then
+elif [ $arg == "--status" ] || [ $arg == "status" ]; then
     pm2 status
-elif [[ $arg == "--reload" || $arg == "reload" ]]; then
+elif [ $arg == "--reload" ] || [ $arg == "reload" ]; then
     pm2 reload ${name}
     pm2 status
-elif [[ $arg == "--logs" || $arg == "logs" ]]; then
+elif [ $arg == "--logs" ] || [ $arg == "logs" ]; then
     pm2 logs ${name}
 else
     echo "Argument non reconnu"

@@ -33,6 +33,13 @@ module.exports = {
     watch: ["./website/SAE/index.html", "./website/SAE/src", "./website/SAE/public"],
     watch_delay: 1000,
     ignore_watch: ["node_modules", "./website/SAE/node_modules", ".git"]
+  },
+  {
+    name: "API",
+    script: "./API/startServer.mjs",
+    watch: ["./API"],
+    watch_delay: 1000,
+    ignore_watch: ["node_modules", "./API/node_modules", ".git"]
   }
 ]
 }

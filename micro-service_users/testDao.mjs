@@ -46,6 +46,7 @@ user = await userDao.addFavorites(userToInsert, favoriteToInsert)
 /** Test : le favoris a bien été rajouté à l'utilisateur */
 
 let favoris = {...favoriteToInsert}
+delete favoris.users
 // favoris.users = user.favorites[0].users
 
 assert.deepStrictEqual([favoris], user.favorites)
@@ -114,7 +115,7 @@ let listeFavoris = await favorisDao.findAll()
 assert.deepStrictEqual(1, listeFavoris.length)
 
 const favoriteToInsert2 = new Favorite({
-    date : new Date("2020-03-19T14:21:00+0200"),
+    // date : new Date("2020-03-19T14:21:00+0200"),
     placeId : "resto"
 })
 

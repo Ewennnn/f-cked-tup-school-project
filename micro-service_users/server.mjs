@@ -12,13 +12,13 @@ import swagger from 'hapi-swagger'
 import { UserJoiConfig } from './joiConfig.mjs';
 
 const joiFavoriteAdd = Joi.object({
-    date: Joi.date(),
+    // date: Joi.date(),
     placeId : Joi.string().required()
 })
 
 const joiUser = Joi.object({
     login: Joi.string().required(),
-    password: Joi.string().required(),
+    // password: Joi.string().required(),
     email: Joi.string().required()
 })
 
@@ -29,11 +29,17 @@ const joiFavorite = Joi.object({
 
 const joiUserWithFavoris = Joi.object({
     login: Joi.string().required(),
-    password: Joi.string().required(),
+    // password: Joi.string().required(),
     email: Joi.string().required(),
     favorites : Joi.array().items( Joi.object({
         placeId : Joi.string()
     }))
+})
+
+const joiUserWithoutFavoris = Joi.object({
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+    email: Joi.string().required()
 })
 
 const routes =[
@@ -59,25 +65,30 @@ const routes =[
         },
         handler: async (request, h) => {
             //le message renvoyé et le code http
-            return h.response(await userController.findAllWithoutSalt()).code(200)
+            let users =  await userController.findAllWithoutSalt()
+            users.forEach(it => {
+                delete it.password
+            })
+            return h.response(users).code(200)
         }
     },
     {
         method: 'GET',
         //une route avec un parametre
         //utilisable avec request.params.login
-        path: '/user/{login}',
+        path: '/user/{login}/{password}',
         options: {
             description: 'Retourne l utilisateur qui a le login donné en paramètre',
             tags: ["api"],
             validate: {
                 params: Joi.object({
-                    login: Joi.string().required()
+                    login: Joi.string().required(),
+                    password : Joi.string().required()
                 })
             },
             response: {
                 status: {
-                    200: joiUserWithFavoris.description("un User qui a le login qu on lui a passé en paramètre"),
+                    200: joiUserWithFavoris.description("un User qui a le login et password qu on lui a passé en paramètre"),
                     404: UserJoiConfig.error
                 }
             }
@@ -85,9 +96,18 @@ const routes =[
         handler: async (request, h) => {
             try {
                 const user = await userController.findByLogin(request.params.login)
-                delete user.salt
-                if (user!=null)
-                    return h.response(user).code(200)
+                // delete user.salt
+                if (user!=null){
+                    const passwordAuth = User.checkPassword(request.params.password, user.salt)
+                    if(user.password == passwordAuth){
+                        delete user.salt
+                        delete user.password
+                        delete user.favorites.forEach(favoris => {
+                            delete favoris.users
+                        });
+                        return h.response(user).code(200)
+                    }
+                }
             } catch (e) {
                 return h.response({message: "User not found", code: 404}).code(404)
             }
@@ -101,13 +121,11 @@ const routes =[
             tags: ["api"],
             response: {
                 status: {
-                    // 200: Joi.string()
                     200 : Joi.array().items(joiFavorite).description("un tableau de favoris")
                 }
             }
         },
         handler: async (request, h) => {
-            //le message renvoyé et le code http
             return h.response(await favorisController.findAll()).code(200)
         }
     },
@@ -116,7 +134,7 @@ const routes =[
         path: '/user',
         options: {
             validate: {
-                payload: joiUser
+                payload: joiUserWithoutFavoris
             },
             description: 'Crée un User en base de donnée',
             tags: ["api"],
@@ -134,6 +152,7 @@ const routes =[
                 const userToAdd = new User(param)
                 const user = await userController.save(userToAdd)
                 delete user.salt
+                delete user.password
                 if (user!=null)
                     return h.response(user).code(200)
             } catch (e) {
@@ -219,6 +238,7 @@ const routes =[
             try {
                 const user = await userController.deleteByLogin(request.params.login)
                 delete user.salt
+                delete user.password
                 if (user!=null)
                     return h.response(user).code(202)
             } catch (e) {
@@ -264,20 +284,21 @@ const routes =[
                 params: Joi.object({
                     login: Joi.string().required()
                 }),
-                payload: Joi.object({
-                    user : joiUserWithFavoris.required()
-                })
+                payload: joiUserWithoutFavoris.required()/*Joi.object({
+                    user: joiUserWithoutFavoris.required()
+                })*/
             }
         },
         handler: async (request, h) => {
             try{
                 console.log(request.params.login);
-                console.log(request.payload.user);
-                const user = await userController.update(request.params.login,request.payload.user)
+                console.log(request.payload);
+                const user = await userController.update(request.params.login,request.payload)
                 if(user == null){
                     console.log("testttttttt");
                 }
                 delete user.salt
+                delete user.password
                 return h.response(user).code(200)
             }catch(e){
                 return h.response({message: 'not founds', code: 400}).code(400)
@@ -286,7 +307,7 @@ const routes =[
     },
         {
         method: 'PUT',
-        path: '/user/favorite/{login}',
+        path: '/favoris/{login}',
         options: {
             description: 'rajoute un favoris à un utilisateur qui a le login en paramètre',
             tags: ["api"],
@@ -300,22 +321,55 @@ const routes =[
                 params: Joi.object({
                     login: Joi.string().required()
                 }),
-                payload: Joi.object({
-                    favoris : joiFavoriteAdd.required()
-                })
+                payload: joiFavoriteAdd.required()
             }
         },
         handler: async (request, h) => {
             try{
                 console.log(request.params.login);
-                console.log(request.payload.favoris);
+                console.log(request.payload);
                 const login = request.params.login
                 const user = await userController.findByLogin(login)
-                const userModify = await userController.addFavorites(user, request.payload.favoris)
+                const userModify = await userController.addFavorites(user, request.payload)
                 delete userModify.salt
+                delete userModify.password
                 return h.response(userModify).code(200) 
             }catch(e){
                 return h.response({message: 'Ce favoris est déjà présent chez le user', code: 400}).code(400)
+            }
+        }
+    },
+    {
+        method: 'PUT',
+        path: '/favoris/delete/{login}',
+        options: {
+            description: 'supprime un favoris à un utilisateur qui a le login en paramètre',
+            tags: ["api"],
+            response: {
+                status: {
+                    200: joiUserWithFavoris.description("un User qui a le login qu on lui a passé en paramètre"),
+                    400: UserJoiConfig.error
+                }
+            },
+            validate: {
+                params: Joi.object({
+                    login: Joi.string().required()
+                }),
+                payload: joiFavoriteAdd.required()
+            }
+        },
+        handler: async (request, h) => {
+            try{
+                console.log(request.params.login);
+                console.log(request.payload);
+                const login = request.params.login
+                const user = await userController.findByLogin(login)
+                const userModify = await userController.deleteFavorites(user, request.payload)
+                delete userModify.salt
+                delete userModify.password
+                return h.response(userModify).code(200) 
+            }catch(e){
+                return h.response({message: 'Ce favoris n est pas présent chez le user.', code: 400}).code(400)
             }
         }
     }

@@ -5,7 +5,10 @@ export const userController = {
     findAllWithoutSalt : async () => {
         let users = await userDao.findAll()
         users.forEach(it => {
-            delete it.salt
+            delete it.salt, 
+            it.favorites.forEach(favoris =>{
+                delete favoris.users
+            })
         })
         return users
     },
@@ -15,5 +18,6 @@ export const userController = {
     save:async(user) => userDao.save(user),
     update: async (login, user) => userDao.update(login,user),
     deleteAll: async () => userDao.deleteUsers(),
-    addFavorites: async (user,favoris) => userDao.addFavorites(user,favoris)
+    addFavorites: async (user,favoris) => userDao.addFavorites(user,favoris),
+    deleteFavorites: async (user, favoris) => userDao.deleteFavorites(user,favoris)
 }

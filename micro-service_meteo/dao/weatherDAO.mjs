@@ -65,7 +65,7 @@ export const weatherDao = {
         weather.weather.forEach(it => {
             if (new Date(it.timestamp * 1000).getDate() === date.getDate()) {       // Si la date (numéro du jour uniquement) parmis la liste des données correspond à la date recherchée
                 dateWeather.push(it)    // La date est ajoutée aux valeurs retournées
-                console.log("find " + new Date(it.timestamp * 1000).getDate());
+                console.log("find " + new Date(it.timestamp * 1000));
             }
         })
         

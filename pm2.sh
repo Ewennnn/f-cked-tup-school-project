@@ -41,7 +41,7 @@ if [[ $arg == "--init" ]]; then
     fi
     if [[ $name == "--push-users" ]]; then
         echo -e "\n\t$(tput bold)Ajout d'utilisateurs$(tput sgr0)"
-        node testDao.mjs
+        npm test
         unset name
     fi
 

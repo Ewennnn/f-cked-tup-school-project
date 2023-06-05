@@ -7,7 +7,8 @@ export const ports = {
     meteo: 3001,
     places: 3002,
     users: 3003,
-    location: 3004
+    location: 3004,
+    API: 3200
 }
 
 const proxy = process.env.https_proxy

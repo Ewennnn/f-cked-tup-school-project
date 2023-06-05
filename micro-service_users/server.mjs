@@ -12,7 +12,7 @@ import swagger from 'hapi-swagger'
 import { UserJoiConfig } from './joiConfig.mjs';
 
 const joiFavoriteAdd = Joi.object({
-    date: Joi.date(),
+    // date: Joi.date(),
     placeId : Joi.string().required()
 })
 
@@ -34,6 +34,12 @@ const joiUserWithFavoris = Joi.object({
     favorites : Joi.array().items( Joi.object({
         placeId : Joi.string()
     }))
+})
+
+const joiUserWithoutFavoris = Joi.object({
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+    email: Joi.string().required()
 })
 
 const routes =[
@@ -128,7 +134,7 @@ const routes =[
         path: '/user',
         options: {
             validate: {
-                payload: joiUser
+                payload: joiUserWithoutFavoris
             },
             description: 'Crée un User en base de donnée',
             tags: ["api"],
@@ -278,16 +284,16 @@ const routes =[
                 params: Joi.object({
                     login: Joi.string().required()
                 }),
-                payload: Joi.object({
-                    user : joiUserWithFavoris.required()
-                })
+                payload: joiUserWithoutFavoris.required()/*Joi.object({
+                    user: joiUserWithoutFavoris.required()
+                })*/
             }
         },
         handler: async (request, h) => {
             try{
                 console.log(request.params.login);
-                console.log(request.payload.user);
-                const user = await userController.update(request.params.login,request.payload.user)
+                console.log(request.payload);
+                const user = await userController.update(request.params.login,request.payload)
                 if(user == null){
                     console.log("testttttttt");
                 }
@@ -301,7 +307,7 @@ const routes =[
     },
         {
         method: 'PUT',
-        path: '/user/favorite/{login}',
+        path: '/favorite/{login}',
         options: {
             description: 'rajoute un favoris à un utilisateur qui a le login en paramètre',
             tags: ["api"],
@@ -315,23 +321,55 @@ const routes =[
                 params: Joi.object({
                     login: Joi.string().required()
                 }),
-                payload: Joi.object({
-                    favoris : joiFavoriteAdd.required()
-                })
+                payload: joiFavoriteAdd.required()
             }
         },
         handler: async (request, h) => {
             try{
                 console.log(request.params.login);
-                console.log(request.payload.favoris);
+                console.log(request.payload);
                 const login = request.params.login
                 const user = await userController.findByLogin(login)
-                const userModify = await userController.addFavorites(user, request.payload.favoris)
+                const userModify = await userController.addFavorites(user, request.payload)
                 delete userModify.salt
                 delete userModify.password
                 return h.response(userModify).code(200) 
             }catch(e){
                 return h.response({message: 'Ce favoris est déjà présent chez le user', code: 400}).code(400)
+            }
+        }
+    },
+    {
+        method: 'PUT',
+        path: '/favorite/delete/{login}',
+        options: {
+            description: 'supprime un favoris à un utilisateur qui a le login en paramètre',
+            tags: ["api"],
+            response: {
+                status: {
+                    200: joiUserWithFavoris.description("un User qui a le login qu on lui a passé en paramètre"),
+                    400: UserJoiConfig.error
+                }
+            },
+            validate: {
+                params: Joi.object({
+                    login: Joi.string().required()
+                }),
+                payload: joiFavoriteAdd.required()
+            }
+        },
+        handler: async (request, h) => {
+            try{
+                console.log(request.params.login);
+                console.log(request.payload);
+                const login = request.params.login
+                const user = await userController.findByLogin(login)
+                const userModify = await userController.deleteFavorites(user, request.payload)
+                delete userModify.salt
+                delete userModify.password
+                return h.response(userModify).code(200) 
+            }catch(e){
+                return h.response({message: 'Ce favoris n est pas présent chez le user.', code: 400}).code(400)
             }
         }
     }

@@ -3,16 +3,15 @@
 </script>
 
 <template>
-  <div class="container">
-    <RegisterDates />
-    </div>
+  <!-- <div class="container"> -->
+    <RegisterDates class="container"/>
+    <!-- </div> -->
 </template>
 
 
 <style scoped>
 .container {
-  display: flex;
-  justify-content: center;
-  align-content: center;
+  margin: 50vh auto;
+  transform: translateY(-50%)
 }
 </style>

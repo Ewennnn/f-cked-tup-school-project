@@ -4,14 +4,13 @@
 </script>
 
 <template>
-    <RegistrationComponent />
+    <RegistrationComponent class="container"/>
 </template>
 
 
 <style scoped>
 .container {
-  display: flex;
-  justify-content: center;
-  align-content: center;
+  margin: 50vh auto;
+  transform: translateY(-50%)
 }
 </style>

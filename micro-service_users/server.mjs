@@ -11,7 +11,7 @@ import vision from '@hapi/vision'
 import swagger from 'hapi-swagger'
 import { UserJoiConfig } from './joiConfig.mjs';
 
-const joiFavoriteAdd = Joi.object({
+const joiFavoriteWithoutUsers = Joi.object({
     // date: Joi.date(),
     placeId : Joi.string().required()
 })
@@ -127,6 +127,36 @@ const routes =[
         },
         handler: async (request, h) => {
             return h.response(await favorisController.findAll()).code(200)
+        }
+    },
+    {
+        method: 'GET',
+        //une route avec un parametre
+        //retourne les favoris lié à un login
+        path: '/favoris/{login}/',
+        options: {
+            description: 'Retourne les favoris lié au login donné en paramètre',
+            tags: ["api"],
+            validate: {
+                params: Joi.object({
+                    login: Joi.string().required()
+                })
+            },
+            response: {
+                status: {
+                    200: joiFavoriteWithoutUsers.description("les Favoris lié au login passé en paramètre"),
+                    404: UserJoiConfig.error
+                }
+            }
+        },
+        handler: async (request, h) => {
+            try {
+                const favoris = await userController.findFavoritesByLogin(request.params.login)
+
+                return h.response(favoris).code(200)
+            }catch (e) {
+                return h.response({message: "User not found", code: 404}).code(404)
+            }
         }
     },
     {
@@ -321,7 +351,7 @@ const routes =[
                 params: Joi.object({
                     login: Joi.string().required()
                 }),
-                payload: joiFavoriteAdd.required()
+                payload: joiFavoriteWithoutUsers.required()
             }
         },
         handler: async (request, h) => {
@@ -355,7 +385,7 @@ const routes =[
                 params: Joi.object({
                     login: Joi.string().required()
                 }),
-                payload: joiFavoriteAdd.required()
+                payload: joiFavoriteWithoutUsers.required()
             }
         },
         handler: async (request, h) => {

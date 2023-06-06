@@ -22,8 +22,7 @@ export const userDao = {
             })
         ).map(elt => new User(elt)),
 
-        //ajout un utilisateur
-        //renvoie l'utilisateur ajouté ou null sinon
+        //renvoie l'utilisateur qui a ce login
         findByLogin : async(login) => {
             const elt = await prisma.user.findUnique({where: {login: login}, include : {favorites : true}}) 
             return elt == null ? null : new User(elt)
@@ -64,6 +63,17 @@ export const userDao = {
             } catch (e) {
                 return Promise.reject(e)
             }
+        },
+        //renvoie les favoris de l'utilisateur qui a ce login
+        findFavoritesByLogin : async(login) => {
+            const user = await prisma.user.findUnique({
+                where: { login: 'userLogin' },
+                include: { favorites: true }
+              });
+              
+              const userFavorites = user.favorites
+
+              return userFavorites
         },
             //renvoie la liste des favoris de l'utilisateur.
     addFavorites: async (user, favoritesToAdd) => {

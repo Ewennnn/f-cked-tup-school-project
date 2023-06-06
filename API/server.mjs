@@ -2,6 +2,7 @@
 
 import Hapi from '@hapi/hapi';
 import { ports } from '../microServices.config.mjs';
+import { apiController } from './controller/apiController.mjs';
 
 const routes =[
     {
@@ -14,9 +15,11 @@ const routes =[
     },
     {
         method: 'GET',
-        path: '/generate/{ville}',
+        path: '/generate/{ville}/{date?}',
         handler: async (request, h) => {
-            return h.response(request.params.ville).code(200)
+            const ville = request.params.ville
+            const date = request.params.date || new Date(Date.now()).toLocaleDateString("en")
+            return h.response(await apiController.generateDates(ville, date)).code(200)
         }
     }
 ]

@@ -4,12 +4,10 @@ import Photo from "./../model/place/Photo.mjs"
 import Place from "./../model/place/Place.mjs"
 import Location from "../model/location/Location.mjs"
 import fetchUsingAgent from "../../microServices.config.mjs"
+import BestDate from "../model/BestDate.mjs"
+import Weather from "../model/Weather.mjs"
 
 describe('test des entités', () => {
-
-    it("test", async () => {
-        chai.expect({test: "lala"}).to.be.eql({test: "lala"})
-    })
 
     it("Photo", async () => {
         const photo = new Photo({width : 500, photo_reference : "dghiuq"})
@@ -38,13 +36,47 @@ describe('test des entités', () => {
 
     it("Location", async () => {
         const loc = new Location({
-            date: new Date(Date.now()),
+            city: "Nantes",
             code_insee: 35238,
             latitude: 48.1172,
-            longitutde: -1.6777,
+            longitude: -1.6777,
         })
 
         chai.expect(loc).contains.keys("coords")
         chai.expect(loc.coords).contains.keys("latitude", "longitude")
+    })
+
+    it("Best Date", () => {
+        const date = new BestDate({
+            date: new Date(Date.now()),
+            location: {
+                city: "Nantes",
+                code_insee: 44109,
+                latitude: 47.21725,
+                longitude: -1.55336
+            },
+            place: {
+                place_id: "identifier",
+                name: "restaurant",
+                rating: 4.4,
+                types: ["restaurant", "point_of_interest", "food"],
+                photos: [
+                    new Photo({photo_reference: "reference1"}),
+                    new Photo({photo_reference: "reference2"}),
+                    new Photo({photo_reference: "reference3", width: 550})
+                ]
+            },
+            weather: {
+                weather: 2,
+                temp2m: 18,
+                probarain: 0,
+                wind10m: 0,
+                probawind70: 10
+            }
+        })
+
+        chai.expect(date).instanceOf(BestDate)
+        chai.expect(date).contains.keys("date")
+        chai.expect(date.date.toLocaleDateString("fr")).be.eql(new Date(Date.now()).toLocaleDateString("fr"))
     })
 })

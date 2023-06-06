@@ -38,6 +38,19 @@ export const apiDAO = {
 
         return data
     },
+    /**Retourne une ville par rapport à un nom de ville */
+    findLocationVille : async (ville) => {
+        const url = "http://localhost:3004/coords/" + ville
+        const response = await fetchUsingAgent(url)
+        const body = await response.json()
+        if(body.code){
+            return body
+        }
+
+        const data = new Location(body)
+
+        return data
+    },
     /** Météo */
     /**Retourne la météo par rapport à un code insee */
     findPrevisionCodeInsee : async (code_insee) => {
@@ -74,9 +87,9 @@ export const apiDAO = {
             return body
         }
 
-        const data = new Place(body)
+        // const data = new Place(body)
 
-        return data
+        return body
     },
     /**Retourne un restaurant qui possède le placeId en paramètre */
     findRestaurantPlaceId : async (placeId) => {
@@ -105,7 +118,7 @@ export const apiDAO = {
         return data
     },
     /**Permet de retourner l'ensemble des Favoris lié à un User par son login. */
-    findFavorisByLogin : async (login,password) => {
+    findFavorisByLogin : async (login) => {
         const url = "http://localhost:3003/favoris/" + login 
         const response = await fetchUsingAgent(url)
         const body = await response.json()
@@ -120,13 +133,25 @@ export const apiDAO = {
     /**Permet de créer un User */
     addUser : async (user) => {
         const url = "http://localhost:3003/user/"
-        const response = (await fetchUsingAgent(url, {method : "POST", body : user} ))
+        const response = await fetchUsingAgent(url, {method : "POST", body : user} )
         const body = await response.json()
         if(body.code){
             return body
         }
 
         const data = new User(body)
+
+        return data
+    },
+    addFavoris : async (favoris) => {
+        const url = "http://localhost:3003/favoris/"
+        const response = await fetchUsingAgent(url, {method : "POST", body : favoris} )
+        const body = await response.body
+        if(body.code){
+            return body
+        }
+
+        const data = new Favoris(body)
 
         return data
     },

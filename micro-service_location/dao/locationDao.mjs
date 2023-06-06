@@ -23,7 +23,7 @@ export const locationDao = {
         const response = await fetchUsingAgent(url)
         const body = await response.json()
         // Retourne le code d'erreur du service contacté
-        if (body.code || Array.isArray(body.cities)) {
+        if (body.code || Array.isArray(body.cities) && Array.of(...body.cities).length == 0) {
             return body
         }
 

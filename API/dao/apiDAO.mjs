@@ -26,7 +26,7 @@ export const apiDAO = {
         return data
     },
     /**Retourne une ville par rapport à une latitude et longitude */
-    findLocationCoordiante : async (latitude,longitude) => {
+    findLocationCoordinate : async (latitude,longitude) => {
         const url = "http://localhost:3004/coords/" + latitude + "/" + longitude
         const response = await fetchUsingAgent(url)
         const body = await response.json()
@@ -105,7 +105,7 @@ export const apiDAO = {
         return data
     },
     /**Permet de retourner l'ensemble des Favoris lié à un User par son login. */
-    findFavorisLogin : async (login,password) => {
+    findFavorisByLogin : async (login,password) => {
         const url = "http://localhost:3003/favoris/" + login 
         const response = await fetchUsingAgent(url)
         const body = await response.json()
@@ -118,7 +118,7 @@ export const apiDAO = {
         return data
     },
     /**Permet de créer un User */
-    AddUser : async (user) => {
+    addUser : async (user) => {
         const url = "http://localhost:3003/user/"
         const response = (await fetchUsingAgent(url, {method : "POST", body : user} ))
         const body = await response.json()

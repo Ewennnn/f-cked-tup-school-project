@@ -1,7 +1,16 @@
 'use strict';
 
 import Hapi from '@hapi/hapi';
+import  Joi from 'joi';
 import { ports } from '../microServices.config.mjs';
+import { apiController } from './controller/apiController.mjs';
+
+const joiUserWithoutFavoris = Joi.object({
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+    email: Joi.string().required()
+})
+
 
 const routes =[
     {
@@ -14,9 +23,33 @@ const routes =[
     },
     {
         method: 'GET',
-        path: '/generate/{ville}',
+        path: '/generate/{ville}/{date?}',
         handler: async (request, h) => {
-            return h.response(request.params.ville).code(200)
+            const ville = request.params.ville
+            const date = request.params.date || new Date(Date.now()).toLocaleDateString("en")
+            return h.response(await apiController.generateDates(ville, date)).code(200)
+        }
+    },
+    {
+        method : 'POST',
+        path: '/user',
+        options: {
+            validate: {
+                payload: joiUserWithoutFavoris
+            },
+            description: 'Crée un User en base de donnée',
+            tags: ["api"],
+            response: {
+                status: {
+                    200: joiUserWithFavoris.description("Crée un User"),
+                    400 : UserJoiConfig.error.description("Le user existe déjà"),
+                }
+            }
+        },
+        handler: async (request, h) => {
+            const user = request.payload
+            const userAdd = await apiController.addUser(user)
+            return h.response(userAdd).code(200)
         }
     }
 ]

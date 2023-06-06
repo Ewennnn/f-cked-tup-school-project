@@ -23,12 +23,12 @@ export const locationDao = {
         const response = await fetchUsingAgent(url)
         const body = await response.json()
         // Retourne le code d'erreur du service contacté
-        if (body.code) {
+        if (body.code || Array.isArray(body.cities) && Array.of(...body.cities).length == 0) {
             return body
         }
 
         // On sérialise les données puis on ajoute cette nouvelle donée au cache
-        const data = new Location(body)
+        const data = Array.isArray(body.cities) && body.cities.length > 0 ? new Location({city: body.cities[0]}) : new Location(body)
         putInCache(data, infos)
         return data
     }
@@ -52,6 +52,14 @@ function putInCache(data, infos) {
             }),
             location: data
         }))
+    } else if (infos.city) {
+        CACHE.push(new CacheLocation({
+            searched_coords: new Coordinates({
+                latitude: data.coords.latitude,
+                longitude: data.coords.longitude
+            }),
+            location: data
+        }))
     }
 }
 
@@ -72,6 +80,13 @@ function findInCache(infos) {
                 return
             }
         })
+    } else if (infos.city) {
+        CACHE.forEach(it => {
+            if (it.location.city == infos.city) {
+                cityInfos = it
+                return
+            }
+        })
     }
     return cityInfos
 }
@@ -82,5 +97,7 @@ function getURL(infos) {
         return `https://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&insee=${infos.code_insee}`
     } else if (infos.coords) {
         return `https://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&latlng=${infos.coords.latitude},${infos.coords.longitude}`
+    } else if (infos.city) {
+        return `http://api.meteo-concept.com/api/location/cities?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&search=${infos.city}`
     }
 }

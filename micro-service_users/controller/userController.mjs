@@ -12,12 +12,13 @@ export const userController = {
         })
         return users
     },
-    findByLogin : async (login) => userDao.findByLogin(login),
-    deleteByLogin: async (login) => userDao.deleteByLogin(login),
-    add:async (user) => userDao.add(user),
-    save:async(user) => userDao.save(user),
-    update: async (login, user) => userDao.update(login,user),
-    deleteAll: async () => userDao.deleteUsers(),
-    addFavorites: async (user,favoris) => userDao.addFavorites(user,favoris),
-    deleteFavorites: async (user, favoris) => userDao.deleteFavorites(user,favoris)
+    findByLogin : async (login) => await userDao.findByLogin(login),
+    deleteByLogin: async (login) => await userDao.deleteByLogin(login),
+    add:async (user) => await userDao.add(user),
+    save:async(user) => await userDao.save(user),
+    update: async (login, user) => await userDao.update(login,user),
+    deleteAll: async () => await userDao.deleteUsers(),
+    findFavoritesByLogin: async (login) => await userDao.findFavoritesByLogin(login),
+    addFavorites: async (user,favoris) => await userDao.addFavorites(user,favoris),
+    deleteFavorites: async (user, favoris) => await userDao.deleteFavorites(user,favoris)
 }

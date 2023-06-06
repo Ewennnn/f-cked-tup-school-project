@@ -81,6 +81,40 @@ const routes = [
             }
             return h.response(resp).code(200)
         }
+    },
+    {
+        method: 'GET',
+        path: '/city/{city}',
+        options: {
+            description: 'Get city informations from his decimals coordinates',
+            tags: ["api"],
+            validate: {
+                params: Joi.object({
+                    city: Joi.string().required()
+                }),
+                failAction: (request, h, err) => {
+                    console.error(`Requête entrante: ${request.method.toUpperCase()} ${request.url.pathname} ${JSON.stringify(request.params)}`);
+                    console.error(err.details)
+                    return h.response({code: err.output.statusCode, message: err.output.payload.message}).code(err.output.statusCode).takeover()
+                }
+            },
+            response: {
+                status: {
+                    200: locationModel,
+                    400: LocationJoiConfig.error,
+                }
+            }
+        },
+        handler: async (req, h) => {
+            let city = new String(req.params.city)
+            city = city.charAt(0).toUpperCase() + city.slice(1);
+
+            const resp = await locationController.findLocationByCity(city)
+            if (Array.isArray(resp.cities)) {
+                return h.response({code: 400, message: "No matching city found"}).code(400)
+            }
+            return h.response(resp).code(200)
+        }
     }
 ]
 

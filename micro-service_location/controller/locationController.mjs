@@ -15,5 +15,10 @@ export const locationController = {
                 longitude: longitude
             }
         })
+    },
+    findLocationByCity : async (city) => {
+        return await locationDao.findCity({
+            city: city
+        })
     }
 }

@@ -20,6 +20,12 @@ if (proxyAgent != null) {
     console.warn("No proxy was found");
 }
 
-export default async function fetchUsingAgent(url) {
-    return proxyAgent != null ? await fetch(url, {agent: proxyAgent}) : await fetch(url)
+export default async function fetchUsingAgent(url, params) {
+    if(params == undefined) {
+        params = {}
+    }
+    if(proxyAgent != null) {
+        params.agent = proxyAgent
+    }
+    return proxyAgent != null ? await fetch(url, params) : await fetch(url)
 }

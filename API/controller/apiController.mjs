@@ -1,6 +1,5 @@
 'use strict'
 
-import { launchBus } from "pm2";
 import { apiDAO } from "../dao/apiDAO.mjs";
 
 export const apiController = {

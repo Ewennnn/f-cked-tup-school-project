@@ -4,7 +4,16 @@ import Hapi from '@hapi/hapi';
 import  Joi from 'joi';
 import { ports } from '../microServices.config.mjs';
 import { apiController } from './controller/apiController.mjs';
+import { APIJoiConfig } from './joiConfig.mjs';
 
+const joiUserWithFavoris = Joi.object({
+    login: Joi.string().required(),
+    // password: Joi.string().required(),
+    email: Joi.string().required(),
+    favorites : Joi.array().items( Joi.object({
+        placeId : Joi.string()
+    }))
+})
 const joiUserWithoutFavoris = Joi.object({
     login: Joi.string().required(),
     password: Joi.string().required(),
@@ -47,7 +56,7 @@ const routes =[
             response: {
                 status: {
                     200: joiUserWithFavoris.description("Crée un User"),
-                    400 : UserJoiConfig.error.description("Le user existe déjà"),
+                    400 : APIJoiConfig.error.description("Le user existe déjà"),
                 }
             }
         },
@@ -73,7 +82,7 @@ const routes =[
                         code: Joi.number().required().description("Code of returned error"),
                         message: Joi.string().required().description("Error message")
                     }).description("Le favoris existe déjà"),
-                    500: UserJoiConfig.error
+                    500: APIJoiConfig.error
                 }
             }
         },
@@ -108,7 +117,7 @@ const routes =[
                         code: Joi.number().required().description("Code of returned error"),
                         message: Joi.string().required().description("Error message")
                     }).description("Le favoris existe déjà"),
-                    500: UserJoiConfig.error
+                    500: APIJoiConfig.error
                 }
             }
         },

@@ -2,18 +2,19 @@ package com.example.bestdate
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.bestdate.data.model.Restaurant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ListActivity : AppCompatActivity() {
-    private lateinit var btn: Button
-
+    private lateinit var restaurantsView : RecyclerView
+    private var restaurants: List<Restaurant> = listOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
@@ -22,12 +23,19 @@ class ListActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Résultats de recherche"
 
-        btn = findViewById(R.id.button)
+        restaurantsView = findViewById(R.id.restaurantsView)
+        restaurantsView.layoutManager = LinearLayoutManager(this)
 
-        btn.setOnClickListener {
-            println("TOTO")
-            this.executeCall()
-        }
+        // Research parameters
+        val latitude = intent.getDoubleExtra("latitude", 0.0)
+        val longitude = intent.getDoubleExtra("longitude", 0.0)
+        val radius = intent.getIntExtra("radius", 0)
+
+        this.executeCall(latitude, longitude, radius)
+        println(restaurants)
+
+        val adapter = MyAdapter(dataList)
+        recyclerView.adapter = adapter
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -41,13 +49,14 @@ class ListActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun executeCall() {
+    private fun executeCall(latitude : Double, longitude : Double, radius : Int) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    ApiClient.apiService.getRestauants(47.21725, -1.55336, 3000)
+                    ApiClient.apiService.getRestauants(latitude, longitude, radius)
                 }
 
+                restaurants = response
                 println(response)
 
                 //if (response.isSuccessful && response.body() != null) {

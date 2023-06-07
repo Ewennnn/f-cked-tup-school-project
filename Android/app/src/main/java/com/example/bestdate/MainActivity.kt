@@ -31,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         searchBtn.setOnClickListener {
             // Code exécuté lors du clic sur le bouton
             val intent = Intent(this, ListActivity::class.java)
+            intent.putExtra("latitude", 47.21725)
+            intent.putExtra("longitude", -1.55336)
+            intent.putExtra("radius", 3000)
             startActivity(intent)
         }
     }

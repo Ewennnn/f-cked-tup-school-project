@@ -1,17 +1,17 @@
 package com.example.bestdate
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.*
-import androidx.appcompat.view.ActionMode
-import kotlinx.coroutines.Dispatchers
-import java.util.Calendar
+import android.widget.Button
+import android.widget.CalendarView
+import android.widget.Spinner
+import android.widget.Switch
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var selectCity: Spinner
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var useMyLoc: Switch
     private lateinit var calendar: CalendarView
     private lateinit var searchBtn: Button

@@ -1,8 +1,9 @@
 package com.example.bestdate.data.model
 
 data class Restaurant(
-    val id: Int,
+
+    val place_id: String,
     val name: String,
-    val address: String,
+    val vicinity: String,
     val rating: Double
 )

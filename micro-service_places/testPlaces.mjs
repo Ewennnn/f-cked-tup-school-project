@@ -4,6 +4,7 @@ import { describe } from "mocha"
 import chai from "chai"
 import { placeController } from "./controller/placeController.mjs"
 import haversine from "haversine-distance"
+import PlaceExport from "./model/PlaceExport.mjs"
 
 
 describe("Tests du micro-service Places", () => {
@@ -23,6 +24,10 @@ describe("Tests du micro-service Places", () => {
     })
 
     it("Get Place using place_id", async () => {
-        
+        const place = await placeController.findRestaurantDetails("ChIJe7OX9JnuBUgRPihikvg1tZs")
+
+        chai.expect(place).instanceOf(PlaceExport)
+        chai.expect(place.place_id).eql("ChIJe7OX9JnuBUgRPihikvg1tZs")
+        chai.expect(haversine({lat: 47.21725, lng: -1.55336}, place.location)).lessThan(3000)
     })
 })

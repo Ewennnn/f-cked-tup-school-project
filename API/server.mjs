@@ -45,6 +45,18 @@ const routes =[
         }
     },
     {
+        method: 'GET',
+        path: '/connexion/{login}/{password}',
+        handler: async (request, h) => {
+            const login = request.params.login || ""
+            const password = request.params.password || ""
+            if (login == "" || password == "") {
+                return h.response({message : "Il faut donner un mot de passe et un login"}).code(400)
+            }
+            return h.response(await apiController.findConnexion(login,password)).code(200)
+        }
+    },
+    {
         method : 'POST',
         path: '/user',
         options: {

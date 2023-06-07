@@ -106,8 +106,10 @@ export const apiDAO = {
     },/**User */
     /**Permet de retourner un User si le login et le password correspondent. */
     findConnexion : async (login,password) => {
+        console.log("OUIIIIIIIIIIIIIIIIIIII");
         const url = "http://localhost:3003/user/" + login + "/" + password
         const response = await fetchUsingAgent(url)
+        console.log(response);
         const body = await response.json()
         if(body.code){
             return body

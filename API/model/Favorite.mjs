@@ -1,10 +1,10 @@
 'use strict'
 import User from "./User.mjs"
 
-export default class Favorite { 
+export default class Favoris { 
     placeId 
     users
-       
+
     constructor(obj) {
         this.placeId = obj.placeId || ""
         if (obj.users)
@@ -12,6 +12,6 @@ export default class Favorite {
                 .users
                 .map(user => new User(user))
         else
-            this.users = []
+            delete this.users
     }
 }

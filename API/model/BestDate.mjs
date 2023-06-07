@@ -1,6 +1,6 @@
 'use strict'
 
-import Weather from "./Weather.mjs"
+import Weather from "./weather/Weather.mjs"
 import Place from "./place/Place.mjs"
 import Location from "./location/Location.mjs"
 

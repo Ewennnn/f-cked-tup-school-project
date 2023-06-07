@@ -5,7 +5,7 @@ export default class Coordinates {
     longitude
 
     constructor(obj) {
-        this.latitude = obj.latitude || undefined
-        this.longitude = obj.longitude || undefined   
+        this.latitude = parseFloat(obj.latitude) || undefined
+        this.longitude = parseFloat(obj.longitude) || undefined   
     }
 }

@@ -5,7 +5,7 @@ import Place from "./../model/place/Place.mjs"
 import Location from "../model/location/Location.mjs"
 import fetchUsingAgent from "../../microServices.config.mjs"
 import BestDate from "../model/BestDate.mjs"
-import Weather from "../model/Weather.mjs"
+import Weather from "../model/weather/Weather.mjs"
 
 describe('test des entités', () => {
 
@@ -78,5 +78,9 @@ describe('test des entités', () => {
         chai.expect(date).instanceOf(BestDate)
         chai.expect(date).contains.keys("date")
         chai.expect(date.date.toLocaleDateString("fr")).be.eql(new Date(Date.now()).toLocaleDateString("fr"))
+        date.place.photos.forEach(it => {
+            chai.expect(it).instanceOf(Photo)
+        }    
+        )
     })
 })

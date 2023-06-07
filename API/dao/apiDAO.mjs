@@ -7,8 +7,11 @@ import Photo from "./../model/place/Photo.mjs"
 import Place from "./../model/place/Place.mjs"
 import Location from "../model/location/Location.mjs"
 import BestDate from "../model/BestDate.mjs"
-import Weather from "../model/Weather.mjs"
+import Weather from "../model/weather/Weather.mjs"
 import User from "../model/User.mjs"
+import WeatherExport from '../model/weather/WeatherExport.mjs'
+import DailyWeatherExport from '../model/weather/WeatherDailyExport.mjs'
+import Favoris from '../model/Favorite.mjs'
 
 
 export const apiDAO = {
@@ -41,7 +44,7 @@ export const apiDAO = {
     },
     /**Retourne une ville par rapport à un nom de ville */
     findLocationVille : async (ville) => {
-        const url = "http://localhost:3004/coords/" + ville
+        const url = "http://localhost:3004/city/" + ville
         const response = await fetchUsingAgent(url)
         const body = await response.json()
         if(body.code){
@@ -62,20 +65,20 @@ export const apiDAO = {
             return body
         }
 
-        const data = new Weather(body)
+        const data = new WeatherExport(body)
 
         return data
     },
     /**Retoune la météo par rapport au code insee et une date */
     findPrevisionCodeInseeDate : async (code_insee,date) => {
-        const url = "http://localhost:3001/previsions/" + code_insee + "/" + date
+        const url = "http://localhost:3001/previsions/" + code_insee + "/" + new Date(date)
         const response = await fetchUsingAgent(url)
         const body = await response.json()
         if(body.code){
             return body
         }
 
-        const data = new Weather(body)
+        const data = new DailyWeatherExport(body)
 
         return data
     },/**Place */
@@ -87,10 +90,7 @@ export const apiDAO = {
         if(body.code){
             return body
         }
-
-        // const data = new Place(body)
-
-        return body
+        return body.map(it => new Place(it))
     },
     /**Retourne un restaurant qui possède le placeId en paramètre */
     findRestaurantPlaceId : async (placeId) => {
@@ -101,6 +101,7 @@ export const apiDAO = {
             return body
         }
 
+        // console.log(body);
         const data = new Place(body)
 
         return data

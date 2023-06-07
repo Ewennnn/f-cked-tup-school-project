@@ -9,7 +9,7 @@ export default class Location {
 
     constructor(obj) {
         this.city = obj.city
-        this.code_insee = obj.code_insee
+        this.code_insee = parseInt(obj.code_insee)
         this.coords = new Coordinates({
             latitude: obj.latitude || obj.coords.latitude,
             longitude: obj.longitude || obj.coords.longitude

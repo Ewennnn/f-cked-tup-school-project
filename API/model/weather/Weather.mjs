@@ -1,6 +1,7 @@
 'use script'
 
 export default class Weather {
+    timestamp
     weather
     temp2m
     probarain

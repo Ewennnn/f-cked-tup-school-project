@@ -1,6 +1,6 @@
 'use strict'
 
-import Favorite from "./favorite.mjs"
+import Favorite from "./Favorite.mjs"
 
 export default class User {
     login

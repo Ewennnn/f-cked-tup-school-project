@@ -1,5 +1,5 @@
 'use strict'
-import User from "./user.mjs"
+import User from "./User.mjs"
 
 export default class Favorite { 
     placeId 

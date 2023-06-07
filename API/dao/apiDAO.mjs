@@ -8,6 +8,7 @@ import Place from "./../model/place/Place.mjs"
 import Location from "../model/location/Location.mjs"
 import BestDate from "../model/BestDate.mjs"
 import Weather from "../model/Weather.mjs"
+import User from "../model/User.mjs"
 
 
 export const apiDAO = {
@@ -106,10 +107,8 @@ export const apiDAO = {
     },/**User */
     /**Permet de retourner un User si le login et le password correspondent. */
     findConnexion : async (login,password) => {
-        console.log("OUIIIIIIIIIIIIIIIIIIII");
         const url = "http://localhost:3003/user/" + login + "/" + password
         const response = await fetchUsingAgent(url)
-        console.log(response);
         const body = await response.json()
         if(body.code){
             return body

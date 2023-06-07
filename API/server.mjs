@@ -167,6 +167,9 @@ const server = Hapi.server({
     host: 'localhost',
     debug: {
         request: ['error']
+    },
+    routes: {
+        cors: true
     }
 });
 

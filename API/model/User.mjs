@@ -1,7 +1,6 @@
 'use strict'
 
 import Favorite from "./favorite.mjs"
-import bcrypt from 'bcryptjs'
 
 export default class User {
     login

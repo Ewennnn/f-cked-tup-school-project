@@ -1,7 +1,7 @@
 <script setup>
 import { useCookies } from "vue3-cookies";
 import { RouterLink } from 'vue-router';
-
+import axios from 'axios';
 </script>
 
 <script>
@@ -16,17 +16,22 @@ import { RouterLink } from 'vue-router';
       password: "",
     }
   },
-    methods: {
-      async connect() {
-        const i = await fetch(`http://127.0.0.1:3200/connexion/${this.login}/${this.password}`)
-        console.log(i.status)
+  methods: {
+    async connect() {
+      try {
+        const response = await axios.post('http://localhost:3200/connexion', JSON.stringify({
+          login: this.login,
+          password: this.password
+        }));
 
-        if (i.status == 200) {
-          console.log("test");
-          this.$router.push({ name: "main" })
+        if (response.status === 200) {
+          this.$router.push({ name: 'main' });
         }
+      } catch (error) {
+        console.error(error);
       }
     }
+  }
 }
 </script>
 
@@ -59,7 +64,7 @@ import { RouterLink } from 'vue-router';
      Pas de compte ?
      <RouterLink to="/register" class="signup-link">Créer un compte</RouterLink>
    </p>
-   
+
   </div>
 </template>
 
@@ -139,6 +144,7 @@ import { RouterLink } from 'vue-router';
 
 .submit:hover {
   background-color: rgb(56, 90, 194);
+  cursor: pointer;
 }
 
 .signup-link {

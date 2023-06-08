@@ -1,5 +1,5 @@
 <script setup>
-  import RegisterDates from '../components/RegisterDates.vue';
+  import RegisterDates from '../components/ConnexionComponent.vue';
 </script>
 
 <template>

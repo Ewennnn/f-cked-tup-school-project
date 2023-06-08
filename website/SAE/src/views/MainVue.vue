@@ -10,7 +10,7 @@ import ButtonDates from '../components/ButtonDates.vue';
             <h1 class="Title">BestDates</h1>
             <p class="subtitle">Avec BestDates, organisez quand VOUS voulez et où VOUS voulez votre date parfait !</p>
             <p class="desc">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolores aliquid iusto, optio perferendis omnis minus voluptatum earum vel asperiores exercitationem tempore porro reiciendis odio quis praesentium at esse vitae beatae!</p>
-            
+
             <div class="form">
                 <va-input v-model="ville" class="mb-6" label="Ville" placeholder="Ville" />
                 <h6 class="date">Date :</h6>
@@ -26,7 +26,7 @@ import ButtonDates from '../components/ButtonDates.vue';
             </div>
         </div>
     </div>
-    
+
 </template>
 
 <script>

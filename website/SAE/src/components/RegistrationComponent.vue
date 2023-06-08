@@ -1,33 +1,34 @@
 <script setup>
 import { RouterLink } from 'vue-router';
+import axios from 'axios';
 </script>
 
 <template>
-    <div class="form">
-    <p class="title">Créer ton compte ! </p>
-    <p class="message">Plus qu'une étape pour profiter des meilleurs dates de ta région ! </p>
-        <div class="flex">
-        <label>
-            <input required="true" placeholder="" type="text" class="input">
-            <span>Nom d'utilisateur</span>
-        </label>
-    </div>  
-            
+  <div class="form">
+    <p class="title">Créer ton compte !</p>
+    <p class="message">Plus qu'une étape pour profiter des meilleurs dates de ta région !</p>
+    <div class="flex">
+      <label>
+        <input required="true" placeholder="" type="text" class="input" v-model="login">
+        <span>Nom d'utilisateur</span>
+      </label>
+    </div>
+
     <label>
-        <input required="true" placeholder="" type="email" class="input">
-        <span>Email</span>
-    </label> 
-        
+      <input required="true" placeholder="" type="email" class="input" v-model="email">
+      <span>Email</span>
+    </label>
+
     <label>
-        <input required="true" placeholder="" type="password" class="input" v-model="password">
-        <span>Mot de passe</span>
+      <input required="true" placeholder="" type="password" class="input" v-model="password">
+      <span>Mot de passe</span>
     </label>
     <label>
-        <input required="true" placeholder="" type="password" class="input" v-model="confirmpassword" @input="checkPassword()">
-        <span v-if="checkPass == true">Confirmer le mot de passe</span>
-        <span v-else style="color: red;">Les mot de passe ne correspondent pas !</span>
+      <input required="true" placeholder="" type="password" class="input" v-model="confirmPassword" @input="checkPassword()">
+      <span v-if="checkPass">Confirmer le mot de passe</span>
+      <span v-else style="color: red;">Les mots de passe ne correspondent pas !</span>
     </label>
-    <button class="submit" @click="submit()">Envoyer</button>
+    <button class="submit" @click="submit">Envoyer</button>
     <p class="signin">Vous avez déjà un compte ? <RouterLink to="/" class="signin">Se connecter</RouterLink> </p>
   </div>
 </template>
@@ -43,17 +44,32 @@ import { RouterLink } from 'vue-router';
     },
     methods: {
       checkPassword() {
-        if (this.password == this.confirmpassword) {
-          this.checkPass = true
-          console.log(this.confirmpassword)
-        }
-        else {
-          this.checkPass = false;
-          console.log(this.password);
-          console.log(this.confirmpassword)
-          
-        }
+        this.checkPass = this.password === this.confirmPassword;
+      },
+      async submit() {
+      if (!this.checkPass) {
+        console.log('Les mots de passe ne correspondent pas !');
+        return;
       }
+
+      try {
+        const response = await axios.post('http://127.0.0.1:3200/register', JSON.stringify({
+          login: this.login,
+          email: this.email,
+          password: this.password
+        }));
+
+        console.log(response.data); // Réponse du serveur
+        // Ajoutez ici la logique pour gérer la réponse du serveur après l'enregistrement
+
+        // Redirection vers une autre page après l'enregistrement réussi
+        // this.$router.push({ name: 'main' });
+
+      } catch (error) {
+        console.error(error);
+        // Gestion des erreurs lors de la soumission du formulaire d'inscription
+      }
+    }
     }
   }
 
@@ -178,6 +194,7 @@ import { RouterLink } from 'vue-router';
 
 .submit:hover {
   background-color: rgb(56, 90, 194);
+  cursor: pointer;
 }
 
 @keyframes pulse {

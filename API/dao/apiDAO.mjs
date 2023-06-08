@@ -116,6 +116,7 @@ export const apiDAO = {
         }
 
         const data = new User(body)
+        delete data.password
 
         return data
     },

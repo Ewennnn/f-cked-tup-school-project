@@ -27,5 +27,8 @@ export default async function fetchUsingAgent(url, params) {
     if(proxyAgent != null) {
         params.agent = proxyAgent
     }
+    if(new String(url).includes("localhost")) {
+        delete params.agent
+    }
     return proxyAgent != null ? await fetch(url, params) : await fetch(url)
 }

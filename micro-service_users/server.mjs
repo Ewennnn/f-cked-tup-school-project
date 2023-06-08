@@ -164,21 +164,24 @@ const routes =[
         path: '/user',
         options: {
             validate: {
-                payload: joiUserWithoutFavoris
+                // payload: joiUserWithoutFavoris,  
             },
             description: 'Crée un User en base de donnée',
             tags: ["api"],
             response: {
                 status: {
-                    200: joiUserWithFavoris.description("Crée un User"),
-                    400 : UserJoiConfig.error.description("Le user existe déjà"),
+                    // 200: joiUserWithFavoris.description("Crée un User"),
+                    // 400 : UserJoiConfig.error.description("Le user existe déjà"),
                 }
             }
         },
         handler: async (request, h) => {
             try{
                 //Le body est accessible via request.payload
-                const param = request.payload
+                console.log("JE SUIS DANS MICRO USER------------------------------------------------------");
+                
+                console.log(JSON.parse(request.payload));
+                const param = JSON.parse(request.payload)
                 const userToAdd = new User(param)
                 const user = await userController.save(userToAdd)
                 delete user.salt

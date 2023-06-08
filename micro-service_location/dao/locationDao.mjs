@@ -21,6 +21,7 @@ export const locationDao = {
         const url = getURL(infos)
         // console.log(await fetchUsingAgent("https://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&insee=44109"));
         const response = await fetchUsingAgent(url)
+        console.log(response.body);
         const body = await response.json()
         // Retourne le code d'erreur du service contacté
         if (body.code || Array.isArray(body.cities) && Array.of(...body.cities).length == 0) {
@@ -98,6 +99,6 @@ function getURL(infos) {
     } else if (infos.coords) {
         return `https://api.meteo-concept.com/api/location/city?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&latlng=${infos.coords.latitude},${infos.coords.longitude}`
     } else if (infos.city) {
-        return `http://api.meteo-concept.com/api/location/cities?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&search=${infos.city}`
+        return `https://api.meteo-concept.com/api/location/cities?token=88d6c1c0be7285f96204e8ade453ea263a5518c850e3e54b7223a627dd78471c&search=${infos.city}`
     }
 }

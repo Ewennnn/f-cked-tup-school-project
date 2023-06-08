@@ -12,13 +12,19 @@ import { RouterLink } from 'vue-router';
   },
   data() {
     return {
-      email: "",
+      login: "",
       password: "",
     }
   },
     methods: {
-      connect() {
-        this.$router.push("/home")
+      async connect() {
+        const i = await fetch(`http://127.0.0.1:3200/connexion/${this.login}/${this.password}`)
+        console.log(i.status)
+
+        if (i.status == 200) {
+          console.log("test");
+          this.$router.push({ name: "main" })
+        }
       }
     }
 }
@@ -28,7 +34,7 @@ import { RouterLink } from 'vue-router';
     <div class="form" >
     <p class="form-title">Connecte toi à ton compte !</p>
      <div class="input-container">
-       <input placeholder="Email" type="email" v-model="email">
+       <input placeholder="Login" type="login" v-model="login">
        <span>
          <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
            <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>

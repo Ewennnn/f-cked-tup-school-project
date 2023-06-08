@@ -122,16 +122,16 @@ export const apiDAO = {
     },
     /**Permet de retourner l'ensemble des Favoris lié à un User par son login. */
     findFavorisByLogin : async (login) => {
-        const url = "http://localhost:3003/favoris/" + login 
+        const url = "http://localhost:3003/favoris/" + login
         const response = await fetchUsingAgent(url)
         const body = await response.json()
         if(body.code){
             return body
         }
 
-        const data = new User(body)
+        // const data = new Favoris(body)
 
-        return data
+        return body.map(it => new Favoris(it))
     },
     /**Permet de créer un User */
 

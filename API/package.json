@@ -4,7 +4,7 @@
   "description": "api of service",
   "main": "stServer.mjs",
   "scripts": {
-    "test": "mocha test/entitiesTest.mjs"
+    "test": "mocha test/entitiesTest.mjs test/daoTest.mjs"
   },
   "author": "",
   "license": "ISC",

@@ -67,13 +67,13 @@ export const userDao = {
         //renvoie les favoris de l'utilisateur qui a ce login
         findFavoritesByLogin : async(login) => {
             const user = await prisma.user.findUnique({
-                where: { login: 'userLogin' },
+                where: { login: login },
                 include: { favorites: true }
-              });
-              
-              const userFavorites = user.favorites
+            });
+            
+            const userFavorites = user.favorites
 
-              return userFavorites
+            return userFavorites
         },
             //renvoie la liste des favoris de l'utilisateur.
     addFavorites: async (user, favoritesToAdd) => {

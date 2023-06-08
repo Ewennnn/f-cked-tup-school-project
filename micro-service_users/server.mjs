@@ -133,7 +133,7 @@ const routes =[
         method: 'GET',
         //une route avec un parametre
         //retourne les favoris lié à un login
-        path: '/favoris/{login}/',
+        path: '/favoris/{login}',
         options: {
             description: 'Retourne les favoris lié au login donné en paramètre',
             tags: ["api"],
@@ -144,17 +144,20 @@ const routes =[
             },
             response: {
                 status: {
-                    200: joiFavoriteWithoutUsers.description("les Favoris lié au login passé en paramètre"),
+                    200: Joi.array().items(joiFavoriteWithoutUsers.description("les Favoris lié au login passé en paramètre")),
                     404: UserJoiConfig.error
                 }
             }
         },
         handler: async (request, h) => {
             try {
+                console.log("Trying to resolve favoris of", request.params.login);
                 const favoris = await userController.findFavoritesByLogin(request.params.login)
+                console.log(favoris);
 
                 return h.response(favoris).code(200)
             }catch (e) {
+                console.error(e);
                 return h.response({message: "User not found", code: 404}).code(404)
             }
         }
@@ -164,31 +167,37 @@ const routes =[
         path: '/user',
         options: {
             validate: {
-                // payload: joiUserWithoutFavoris,  
+                payload: joiUserWithoutFavoris,  
             },
             description: 'Crée un User en base de donnée',
             tags: ["api"],
             response: {
                 status: {
-                    // 200: joiUserWithFavoris.description("Crée un User"),
-                    // 400 : UserJoiConfig.error.description("Le user existe déjà"),
+                    200: joiUserWithFavoris.description("Crée un User"),
+                    400 : UserJoiConfig.error.description("Le user existe déjà"),
                 }
             }
         },
         handler: async (request, h) => {
             try{
                 //Le body est accessible via request.payload
-                console.log("JE SUIS DANS MICRO USER------------------------------------------------------");
-                
-                console.log(JSON.parse(request.payload));
-                const param = JSON.parse(request.payload)
+                let param
+                try {
+                    param = JSON.parse(request.payload)
+                } catch(e) {
+                    param = request.payload
+                }
                 const userToAdd = new User(param)
+                console.log("Create new user: ", userToAdd.login);
                 const user = await userController.save(userToAdd)
                 delete user.salt
                 delete user.password
-                if (user!=null)
+                if (user!=null) {
+                    console.log(user.login, "successfully created");
                     return h.response(user).code(200)
+                }
             } catch (e) {
+                console.error(e)
                 return h.response({message: "already exist", code: 400}).code(400)
             }
         }
@@ -269,12 +278,17 @@ const routes =[
         handler: async (request, h) => {
 
             try {
+                console.log("Trying to delete user:", request.params.login);
                 const user = await userController.deleteByLogin(request.params.login)
                 delete user.salt
                 delete user.password
-                if (user!=null)
+                if (user!=null) {
+                    console.log(user.login, "successfully deleted");
                     return h.response(user).code(202)
+                }
+                throw new Error("User is not deleted")
             } catch (e) {
+                console.error(e);
                 return h.response({message: e.meta.cause, code: 404}).code(404)
             }
         }

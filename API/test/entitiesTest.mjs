@@ -25,12 +25,12 @@ describe('test des entités', () => {
     })
 
     it("Place", async () => {
-        const place = new Place({place_id: "gciyd",name:"test",rating:4.5,types:["Restaurant"],photos:"hcuoqguiqgdusiogq"})
-        chai.expect(place).to.be.eql({place_id: "gciyd",name:"test",rating:4.5,types:["Restaurant"],photos:"hcuoqguiqgdusiogq"})
+        const place = new Place({place_id: "gciyd",name:"test", coords: {latitude: 40.12, longitude: -1.52},rating:4.5,types:["Restaurant"],photos:[{photo_reference: "hcuoqguiqgdusiogq"}]})
+        chai.expect(place).to.be.eql({place_id: "gciyd",name:"test", coords: {latitude: 40.12, longitude: -1.52},rating:4.5,types:["Restaurant"],photos:[{photo_reference: "hcuoqguiqgdusiogq", width: 400}]})
         chai.expect(place.place_id).to.be.eql("gciyd")
         chai.expect(place.name).to.be.eql("test")
         chai.expect(place.rating).to.be.eql(4.5)
-        chai.expect(place.photos).to.be.eql("hcuoqguiqgdusiogq")
+        chai.expect(place.photos).to.be.eql([{photo_reference: "hcuoqguiqgdusiogq", width: 400}])
         chai.expect(place.types).to.have.members(["Restaurant"])
     })
 

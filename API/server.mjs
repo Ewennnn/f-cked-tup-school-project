@@ -45,15 +45,20 @@ const routes =[
         }
     },
     {
-        method: 'GET',
-        path: '/connexion/{login}/{password}',
+        method: 'POST',
+        path: '/connexion',
         handler: async (request, h) => {
-            const login = request.params.login || ""
-            const password = request.params.password || ""
-            if (login == "" || password == "") {
+            let user = undefined
+            try {
+                user = JSON.parse(request.payload)
+            } catch(e) {
+                user = request.payload
+            }
+            if (user == undefined) {
                 return h.response({message : "Il faut donner un mot de passe et un login"}).code(400)
             }
-            return h.response(await apiController.findConnexion(login,password)).code(200)
+            console.log("Try connecting user", user.login);
+            return h.response(await apiController.findConnexion(user.login,user.password)).code(200)
         }
     },
     {

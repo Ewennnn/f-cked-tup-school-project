@@ -10,8 +10,9 @@ import { apiDAO } from "../dao/apiDAO.mjs"
 import WeatherExport from "../model/weather/WeatherExport.mjs"
 import DailyWeatherExport from "../model/weather/WeatherDailyExport.mjs"
 import User from "../model/User.mjs"
+import Favoris from "../model/Favorite.mjs"
 
-const debugMode = false
+const debugMode = true
 
 describe("API DAO tests", () => {
     it("Location", async () => {
@@ -108,10 +109,13 @@ describe("API DAO tests", () => {
 
     it("User favoris", async () => {
         const favoris = await apiDAO.findFavorisByLogin("loulou")
-        
+
         chai.expect(favoris).is.an('array')
         chai.expect(favoris.length).eql(2)
-        chai.expect(favoris).contain.all("ChIJVzuqS6HuBUgRiH1RPUyBffg", "resto")
+        favoris.forEach(it => {
+            chai.expect(it).instanceOf(Favoris)
+        })
+        chai.expect(favoris).deep.include.members([{placeId: "ChIJVzuqS6HuBUgRiH1RPUyBffg"}, {placeId: "resto"}])
     })
 
     it("Add user", async () => {

@@ -5,7 +5,7 @@ import Photo from "./Photo.mjs"
 export default class Place {
     place_id
     name
-    location
+    coords
     rating
     types
     photos

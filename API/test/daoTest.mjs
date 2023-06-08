@@ -11,7 +11,7 @@ import WeatherExport from "../model/weather/WeatherExport.mjs"
 import DailyWeatherExport from "../model/weather/WeatherDailyExport.mjs"
 import User from "../model/User.mjs"
 
-const debugMode = false
+const debugMode = true
 
 describe("API DAO tests", () => {
     it("Location", async () => {
@@ -109,6 +109,7 @@ describe("API DAO tests", () => {
     it("User favoris", async () => {
         const favoris = await apiDAO.findFavorisByLogin("loulou")
         
+        debugLog(favoris)
         chai.expect(favoris).is.an('array')
         chai.expect(favoris.length).eql(2)
         chai.expect(favoris).contain.all("ChIJVzuqS6HuBUgRiH1RPUyBffg", "resto")

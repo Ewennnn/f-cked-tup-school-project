@@ -5,28 +5,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bestdate.data.model.Restaurant
 
-class MyAdapter(private val dataList: List<String>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class MyAdapter(private val dataList: List<Restaurant>) : RecyclerView.Adapter<MyAdapter.RestaurantViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
-        return ViewHolder(view)
+    class RestaurantViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
+        val name = view.findViewById<TextView>(R.id.rest_name)
+        val vicinity = view.findViewById<TextView>(R.id.vicinity)
+        val rating = view.findViewById<TextView>(R.id.rest_rate)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
+        val layout = LayoutInflater.from(parent.context).inflate(R.layout.layout_list, parent, false)
+        return RestaurantViewHolder(layout)
+    }
+
+    override fun onBindViewHolder(holder: RestaurantViewHolder, position: Int) {
         val data = dataList[position]
-        holder.bind(data)
+        holder.name.text = data.name
+        holder.vicinity.text = data.vicinity
+        holder.rating.text = data.rating.toString()
     }
 
     override fun getItemCount(): Int {
         return dataList.size
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: String) {
-            // Bind data to views in the item layout
-            val textView = itemView.findViewById<TextView>(R.id.textView)
-            textView.text = data
-        }
     }
-}
+

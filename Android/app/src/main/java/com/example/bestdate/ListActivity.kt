@@ -3,6 +3,7 @@ package com.example.bestdate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,8 +35,9 @@ class ListActivity : AppCompatActivity() {
         this.executeCall(latitude, longitude, radius)
         println(restaurants)
 
-        val adapter = MyAdapter(dataList)
-        recyclerView.adapter = adapter
+        val adapter = ArrayAdapter<Restaurant>(this, android.R.layout.simple_list_item_1, restaurants)
+        restaurantsView.layoutManager = LinearLayoutManager(this)
+        restaurantsView.adapter = MyAdapter(restaurants)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

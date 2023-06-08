@@ -119,12 +119,20 @@ describe("API DAO tests", () => {
     })
 
     it("Add user", async () => {
+        await fetchUsingAgent("http://localhost:3003/user/testUser", {method: 'DELETE'})
+
         const addedUser = await apiDAO.addUser({
             login: "testUser",
             password: "testPassword",
             email: "testUser@testmail.com"
         })
-        debugLog(addedUser)
+        
+        chai.expect(addedUser).instanceOf(User)
+        chai.expect(addedUser).not.contain.keys("password")
+        chai.expect(addedUser.login).eql("testUser")
+
+        // Delete at the end to re run tests without errors
+        await fetchUsingAgent("http://localhost:3003/user/testUser", {method: 'DELETE'})
     })
 
     it("Add favoris", async () => {

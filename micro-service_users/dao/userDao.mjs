@@ -52,6 +52,9 @@ export const userDao = {
         },
         save : async (user) => {
             try {
+                if (user.login == "" || user.password == "" || user.email == "") {
+                    throw new Error("Empty user not allowed")
+                }
                 const param = {...user} //clone
                 delete param.favorites
                 await prisma.user.create({

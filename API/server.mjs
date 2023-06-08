@@ -63,7 +63,7 @@ const routes =[
     },
     {
         method : 'POST',
-        path: '/user',
+        path: '/register',
         options: {
             validate: {
                 payload: joiUserWithoutFavoris

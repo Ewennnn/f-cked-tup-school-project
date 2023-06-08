@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1aebd9f-1c1d-46b4-b039-c6b4231e0000" name="Changes" comment="" />
+    <list default="true" id="c1aebd9f-1c1d-46b4-b039-c6b4231e0000" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/API/test/daoTest.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/API/test/daoTest.mjs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,7 +29,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/ecovelo/Documents/cours-iut/S4/SAE-S4/eq_alt_00_barassin-lenny_beneteau-victor_bosquet-ewen_boulay-jonathan"
+    "last_opened_file_path": "C:/Users/ewen/Desktop/eq_alt_00_barassin-lenny_beneteau-victor_bosquet-ewen_boulay-jonathan/Android"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -40,5 +42,16 @@
       <updated>1686136218913</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

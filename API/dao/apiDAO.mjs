@@ -134,15 +134,27 @@ export const apiDAO = {
         return data
     },
     /**Permet de créer un User */
+
     addUser : async (user) => {
-        const url = "http://localhost:3003/user/"
-        const response = await fetchUsingAgent(url, {method : "POST", body : user} )
+        // console.log(user);
+        const url = "http://localhost:3003/user"
+        // console.log(url);
+        const dataSend = JSON.stringify(user)
+        console.log(dataSend);
+        const response = await fetchUsingAgent(url, {method : "POST", body : dataSend} )
+        // console.log(response);
         const body = await response.json()
+
+        console.log(body, 'OOOOOOOOOOOOOOOOOOOOOO');
+        
         if(body.code){
             return body
         }
 
+        console.log("T4AS OUBLIE");
+
         const data = new User(body)
+        delete data.password
 
         return data
     },

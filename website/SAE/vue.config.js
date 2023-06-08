@@ -1,3 +1,3 @@
 export const devServer = {
-  proxy: 'http://localhost:3200/',
+  proxy: 'http://localhost:*/',
 };

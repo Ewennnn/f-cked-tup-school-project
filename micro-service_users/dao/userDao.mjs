@@ -84,7 +84,6 @@ export const userDao = {
             // Permet de savoir si le favoris est déjà présent chez le user.
             const resultat = user.favorites.find(favoris => favoris.placeId == favoritesToAdd.placeId)
             if (resultat != undefined) {
-                console.log("ICI");
                 return Promise.reject(e)
             }
             // delete favoritesToAdd.users

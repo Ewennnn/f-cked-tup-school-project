@@ -114,7 +114,7 @@ const routes =[
         },
         handler: async (request, h) => {
             const ville = request.params.ville
-            const date = request.params.date == undefined ? request.params.date : new Date(Date.now()).toLocaleDateString("en")
+            const date = request.params.date != undefined ? request.params.date : new Date(Date.now()).toLocaleDateString("en")
             return h.response(await apiController.generateDates(ville, date)).code(200)
         }
     },

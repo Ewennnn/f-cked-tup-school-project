@@ -26,12 +26,11 @@ describe('test des entités', () => {
 
     it("Place", async () => {
         const place = new Place({place_id: "gciyd",name:"test", coords: {latitude: 40.12, longitude: -1.52},rating:4.5,types:["Restaurant"],photos:[{photo_reference: "hcuoqguiqgdusiogq"}]})
-        chai.expect(place).to.be.eql({place_id: "gciyd",name:"test", coords: {latitude: 40.12, longitude: -1.52},rating:4.5,types:["Restaurant"],photos:[{photo_reference: "hcuoqguiqgdusiogq", width: 400}]})
         chai.expect(place.place_id).to.be.eql("gciyd")
         chai.expect(place.name).to.be.eql("test")
         chai.expect(place.rating).to.be.eql(4.5)
-        chai.expect(place.photos).to.be.eql([{photo_reference: "hcuoqguiqgdusiogq", width: 400}])
         chai.expect(place.types).to.have.members(["Restaurant"])
+        chai.expect(place.photos[0].link).contains(place.photos[0].photo_reference)
     })
 
     it("Location", async () => {
@@ -58,6 +57,10 @@ describe('test des entités', () => {
             place: {
                 place_id: "identifier",
                 name: "restaurant",
+                coords: {
+                    latitude: 47.21725,
+                    longitude: -1.55336
+                },
                 rating: 4.4,
                 types: ["restaurant", "point_of_interest", "food"],
                 photos: [

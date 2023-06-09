@@ -12,7 +12,7 @@ export const placeDAO = {
       const response = await fetchUsingAgent(url)
       const data = await response.json()
       if (data.status === 'OK') {
-        // console.log(data.results);
+        // console.log("LALALA", data);
         return await data.results.map(it => new PlacesExport(it))
       } else {
         return {message: "error"}

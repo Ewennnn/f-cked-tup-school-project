@@ -90,6 +90,9 @@ export const apiDAO = {
         if(body.code){
             return body
         }
+        if (body.statusCode == 500) {
+            return []
+        }
         return body.map(it => new Place(it))
     },
     /**Retourne un restaurant qui possède le placeId en paramètre */
@@ -101,7 +104,6 @@ export const apiDAO = {
             return body
         }
 
-        // console.log(body);
         const data = new Place(body)
 
         return data

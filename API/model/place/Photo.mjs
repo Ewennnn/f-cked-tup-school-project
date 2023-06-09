@@ -5,12 +5,15 @@ const GOOGLE_MAPS_API_KEY = 'AIzaSyCbMInaYLcbo9HZzZ4Eg3kBxkz2lnWO1N0'
 export default class Photo {
     width
     photo_reference
+    link
     
     constructor(obj) {
-        Object.assign(this, obj)
+        this.width = obj.width
+        this.photo_reference = obj.photo_reference
         if (this.width == undefined) {
             this.width = 400
         }
+        this.link = this.getLink()
     }
 
     getLink() {

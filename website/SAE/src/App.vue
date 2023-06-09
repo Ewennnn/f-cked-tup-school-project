@@ -1,73 +1,41 @@
 <script setup>
 import { RouterView } from 'vue-router';
+import NavbarBestDates from './components/NavbarBestDates.vue';
 </script>
 
 <template>
-  <RouterView></RouterView>
-  <div class="wrapper"></div>
-
+  <NavbarBestDates class="navbar"></NavbarBestDates>
+  <div class="conteneur">
+    <RouterView></RouterView>
+  </div>
 </template>
 
 <style scoped>
-/* header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  .navbar {
+    width: 100vw;
+    height: 5rem;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+  .conteneur {
+        position: relative;
+        height: calc(100% - 5rem);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        background-color: #ffffffdd;
+    }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-} */
+    .conteneur::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: url('/public/Le-«-Love-bombing-»-la-meilleure-arme-des-pervers-narcissiques2.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        filter: blur(5px); /* Valeur de flou pour l'élément superposé */
+        z-index: -1;
+    }
 </style>

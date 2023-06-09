@@ -6,24 +6,27 @@
     >
     <div class="navbar">
       <div class="left">
-        <va-navbar-item>
-          <img src="../assets/logo.png" alt="" class="logo">
+        <router-link to="/home">
+          <va-navbar-item>
+            <img src="../assets/logo.png" alt="" class="logo">
+          </va-navbar-item>
+        </router-link>
+      </div>
+      <div v-if="connected">
+        <va-navbar-item class="item">
+          <router-link to="/favoris">
+            <va-avatar class="profile"> J.K. </va-avatar>
+          </router-link>
         </va-navbar-item>
       </div>
-      <div class="right" v-if="connected">
-        <va-navbar-item class="item">
-          <ButtonDates name="Compte"></ButtonDates></va-navbar-item>
-        <va-navbar-item class="item">
-          <va-avatar> J.K. </va-avatar>
+      <div v-else >
+        <va-navbar-item>
+          <ButtonDates name="Connexion"></ButtonDates>
         </va-navbar-item>
       </div>
-      <div class="right" v-else >
-        <va-navbar-item>
-        <ButtonDates name="Connection"></ButtonDates></va-navbar-item>
-        </div>
     </div>
-    </va-navbar>
-    </template>
+  </va-navbar>
+</template>
   
 <script setup>
   import { computed } from "vue";
@@ -46,29 +49,30 @@
       };
     }
   });
-  </script>
-  
-  <style scoped>
-.main-container {
-  display: flex;
-  justify-content: center;  /*Ajout de cette ligne*/ 
-  align-items: center; /*Ajout de cette ligne*/
-}
-.navbar {
+</script>
+
+<style scoped>
+  .main-container {
+    display: flex;
+    justify-content: center;  /*Ajout de cette ligne*/ 
+    align-items: center; /*Ajout de cette ligne*/
+  }
+
+  .navbar {
     width: 70vw;
     /* max-width: 100%; */
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
 
-  .right {
-    display: flex;
-    justify-content: space-between;
-    width: 7vw;
+  .profile {
+    width: 4rem;
+    height: 4rem;
   }
+
   .logo {
-    height: 4vh;
+    height: 4rem;
     width: auto;
   }
-  </style>
-  
+</style>

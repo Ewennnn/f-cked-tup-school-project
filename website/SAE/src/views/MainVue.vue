@@ -1,18 +1,15 @@
 <script setup>
-import NavbarBestDates from '../components/NavbarBestDates.vue';
 import ButtonDates from '../components/ButtonDates.vue';
 </script>
 
 <template>
-    <NavbarBestDates class="navbar"></NavbarBestDates>
-    <div class="conteneur">
-        <div class="research">
-            <h1 class="Title">BestDates</h1>
-            <p class="subtitle">Avec BestDates, organisez quand VOUS voulez et où VOUS voulez votre date parfait !</p>
-            <p class="desc">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolores aliquid iusto, optio perferendis omnis minus voluptatum earum vel asperiores exercitationem tempore porro reiciendis odio quis praesentium at esse vitae beatae!</p>
+        <div class="wrapper">
+            <h1 class="title">BestDates</h1>
+            <p class="subtitle">Avec BestDates, organisez quand VOUS voulez et où VOUS voulez pour votre date parfait !</p>
+            <p class="desc">Choisissez une ville, une date, et laissez-vous porter !</p>
 
             <div class="form">
-                <va-input v-model="ville" class="mb-6" label="Ville" placeholder="Ville" />
+                <va-input v-model="ville" label="Ville" placeholder="Ville" />
                 <h6 class="date">Date :</h6>
                 <va-date-picker
                     mode="multiple"
@@ -22,11 +19,10 @@ import ButtonDates from '../components/ButtonDates.vue';
                     stateful
                     @click="test"
                 />
-                <ButtonDates name="BestDate !" class="buttonDate"></ButtonDates>
+                <ButtonDates name="Create Date !" class="buttonDate"></ButtonDates>
             </div>
         </div>
-    </div>
-
+        <router-view></router-view>
 </template>
 
 <script>
@@ -55,60 +51,51 @@ export default {
 </script>
 
 <style scoped>
-    .navbar {
-        width: 100vw;
-        height: 5vh;
-    }
-    .conteneur {
-        height: 95vh;
-        width: 100vw;
-        /* background-color: black; */
+
+    .wrapper {
+        width: 50vw;
         display: flex;
-        top: 0%;
-        /* justify-content: center; */
-    }
-    .research {
-        width: 100%;
-        height: fit-content;
-        display: flex;
-        flex-direction: column;
-        align-items : center;
         justify-content: center;
-        /* background-color: red; */
-        margin-top: 2vh;
+        flex-wrap: wrap;
     }
 
-    .Title {
-        font-size: 1.5vw;
-        width: fit-content;
-        /* background-color: blue; */
+    .title {
+        font-size: 5rem;
+        width: 100%;
+        height: fit-content;
+        text-justify: distribute;
+        margin: 1rem 0;
     }
 
     .subtitle {
-        width: fit-content;
-        margin-top: 0.8vh;
+        width: 100%;
+        font-size: 1.5rem;
+        font-weight: bold;
+        height: fit-content;
         flex-wrap: wrap;
-        /* background-color: green; */
     }
 
     .desc {
         margin-top: 1vh;
-        width: 25vw;
+        width: 100%;
     }
 
     .form {
         display: flex;
         flex-direction: column;
-        margin-top: 5vh;
+        margin-top: 1rem;
     }
 
     .date {
-        margin-top: 2vh;
+        margin-top: 2rem;
     }
 
+    .buttonDate {
+        margin: 4rem auto;
+    }
     .buttonDate:hover {
         color: #FF6F6F;
         border: 2px solid #FF6F6F;
-    }           
+    }
 
 </style>

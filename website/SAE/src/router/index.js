@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import IndexView from '../views/IndexVue.vue'
 import RegisterVue from '../views/RegisterVue.vue'
 import MainVue from '../views/MainVue.vue'
+import FavorisVue from '../views/FavorisVue.vue'
+import DatesVue from '../views/DatesVue.vue'
 
 const router = createRouter({
   mode: 'history',
@@ -28,6 +30,16 @@ const router = createRouter({
       path: '/home',
       name: 'main',
       component: MainVue
+    },
+    {
+      path: '/favoris',
+      name: 'favoris',
+      component: FavorisVue
+    },
+    {
+      path: '/dates',
+      name: 'dates',
+      component: DatesVue
     }
   ]
 })

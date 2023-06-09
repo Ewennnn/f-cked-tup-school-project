@@ -64,7 +64,7 @@ import axios from 'axios';
         // Ajoutez ici la logique pour gérer la réponse du serveur après l'enregistrement
 
         // Redirection vers une autre page après l'enregistrement réussi
-        // this.$router.push({ name: 'main' });
+        this.$router.push({ name: 'main' });
 
       } catch (error) {
         console.error(error);

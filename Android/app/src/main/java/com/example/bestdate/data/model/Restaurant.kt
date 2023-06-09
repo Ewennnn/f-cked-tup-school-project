@@ -1,9 +1,9 @@
 package com.example.bestdate.data.model
 
-data class Restaurant(
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-    val place_id: String,
-    val name: String,
-    val vicinity: String,
-    val rating: Double
-)
+
+@Parcelize
+data class Restaurant(val place_id: String, val name: String, val vicinity: String, val rating: Double, var international_phone_number : String = "+33000000000", val photos : Photos? = null):
+    Parcelable

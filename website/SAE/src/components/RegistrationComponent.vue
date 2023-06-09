@@ -57,7 +57,8 @@ import axios from 'axios';
           login: this.login,
           email: this.email,
           password: this.password
-        }));
+        }),
+        {headers: {"Content-Type":"application/json"}});
 
         console.log(response.data); // Réponse du serveur
         // Ajoutez ici la logique pour gérer la réponse du serveur après l'enregistrement

@@ -2,36 +2,29 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="400dp"
+    android:layout_height="50dp">
 
     <TextView
         android:id="@+id/rest_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="13dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/vicinity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="13dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/rest_name"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
+    <RatingBar
         android:id="@+id/rest_rate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="13dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/vicinity"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="239dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="175dp"
+        android:max="5"
+        android:numStars="5"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="4dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

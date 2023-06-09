@@ -61,6 +61,7 @@ export default {
   border: 1px solid #000;
   border-radius: 15px;
   width: 10rem;
+  height: 15rem;
   margin: 1rem;
   padding: 1rem;
 }

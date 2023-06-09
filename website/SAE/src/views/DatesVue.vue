@@ -6,8 +6,9 @@
   <h1 class="title">Dates</h1>
   <div class="container">
     <div class="card" v-for="date in dates" :key="date.id">
-      <img :src="date.place.photos.link" alt="image">
+      <img :src="date.place.photos[0].link" alt="image" class="img">
       <h1>{{ date.place.name }}</h1>
+      <p>{{ new Date(date.date).toLocaleDateString('fr') }}</p>
     </div>
   </div>
 </div>
@@ -49,11 +50,9 @@ export default {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  background-color: aqua;
 }
 
 .container {
-  background-color: antiquewhite;
   display: flex;
   flex-wrap: wrap;
   margin: 0;
@@ -72,5 +71,9 @@ export default {
   height: fit-content;
   text-justify: distribute;
   margin: 1rem 0;
+}
+
+.img {
+  width: 100%;
 }
 </style>

@@ -9,7 +9,7 @@ import ButtonDates from '../components/ButtonDates.vue';
             <p class="desc">Choisissez une ville, une date, et laissez-vous porter !</p>
 
             <div class="form">
-                <va-input v-model="ville" label="Ville" placeholder="Ville" />
+                <va-input v-model="ville" label="Ville" placeholder="Ville" required/>
                 <h6 class="date">Date :</h6>
                 <va-date-picker
                     mode="multiple"

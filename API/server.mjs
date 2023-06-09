@@ -244,6 +244,36 @@ const routes =[
                 return h.response({message: 'Ce favoris est déjà présent chez le user', code: 400}).code(400)
             }
         },
+        method: 'POST',
+        path: '/deleteFavorisUser',
+        options: {
+            description: 'supprime le lien d\'un favoris  à un utilisateur',
+            tags: ["api"],
+            response: {
+                status: {
+                    200: joiUserWithFavoris.description("Le User qui a eu un favoris en moins"),
+                    400: APIJoiConfig.error
+                }
+            },
+            validate: {
+                // params: Joi.object({
+                //     login: Joi.string().required()
+                // }),
+                payload: Joi.object({
+                    placeId : Joi.string().required(),
+                    login : Joi.string().required(),
+                }) 
+            }
+        },
+        handler: async (request, h) => {
+            try{
+                const login = request.payload.login
+                const userModify = await apiController.deleteFavoritesUser(login, request.payload.placeId)
+                return h.response(userModify).code(200) 
+            }catch(e){
+                return h.response({message: 'Ce favoris n\'est pas présent chez le user', code: 400}).code(400)
+            }
+        },
         
         
 

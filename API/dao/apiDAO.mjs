@@ -116,7 +116,6 @@ export const apiDAO = {
         console.log("-----------------------------------------------");
         const body = await response.json()
         if(body.code){
-            console.log("YOUHOUUUUUUUUUUU");
             console.log(body);
             return body
         }
@@ -176,6 +175,21 @@ export const apiDAO = {
         const url = "http://localhost:3003/favoris/" + login
         favoris = {placeId : favoris}
         const response = await fetchUsingAgent(url, {method : "PUT", body : JSON.stringify(favoris), headers: {'Content-Type': 'application/json'}} )
+        const body = await response.json()
+        if(body.code){
+            return body
+        }
+
+        const data = new User(body)
+
+        delete data.password
+
+        return data
+    },
+    deleteFavoritesUser : async (loginN,placeIdN) => {
+        const url = "http://localhost:3003/favorisUser"
+        const favoris = {placeId : placeIdN, login : loginN}
+        const response = await fetchUsingAgent(url, {method : "DELETE", body : JSON.stringify(favoris), headers: {'Content-Type': 'application/json'}} )
         const body = await response.json()
         if(body.code){
             return body

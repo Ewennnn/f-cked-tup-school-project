@@ -60,7 +60,8 @@ export const apiController = {
     findFavorisByLogin : async (login) => await apiDAO.findFavorisByLogin(login),
     addUser : async (user) => await apiDAO.addUser(user),
     addFavoris : async (favoris) => await apiDAO.addFavoris(favoris),
-    addFavoritesUser : async (login, favoris) => await apiDAO.addFavoritesUser(login, favoris)
+    addFavoritesUser : async (login, favoris) => await apiDAO.addFavoritesUser(login, favoris),
+    deleteFavoritesUser : async (login, placeId) => await apiDAO.deleteFavoritesUser(login, placeId)
 }
 
 function alreadyIn(array, place_id) {

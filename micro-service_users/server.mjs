@@ -10,6 +10,7 @@ import inert from '@hapi/inert';
 import vision from '@hapi/vision'
 import swagger from 'hapi-swagger'
 import { UserJoiConfig } from './joiConfig.mjs';
+import Favoris from '../API/model/Favorite.mjs';
 
 const joiFavoriteWithoutUsers = Joi.object({
     // date: Joi.date(),
@@ -155,7 +156,6 @@ const routes =[
             try {
                 console.log("Trying to resolve favoris of", request.params.login);
                 const favoris = await userController.findFavoritesByLogin(request.params.login)
-                console.log(favoris);
 
                 return h.response(favoris).code(200)
             }catch (e) {
@@ -318,6 +318,47 @@ const routes =[
         }
     },
     {
+        method: 'DELETE',
+        path: '/favorisUser',
+        options: {
+            description: 'Supprime le lien entre un user et un favorite',
+            tags: ["api"],
+            response: {
+                status: {
+                    202: joiUserWithFavoris.description("un User qui a le login qu on lui a passé en paramètre"),
+                    404: UserJoiConfig.error
+                }
+            },
+            validate: {
+                payload : Joi.object({
+                    login : Joi.string().required(),
+                    placeId : Joi.string().required()
+                })
+            }
+        },
+        handler: async (request, h) => {
+
+            try {
+                const login = request.payload.login
+                const placeId = request.payload.placeId
+                const favoris = new Favoris({placeId : placeId})
+                const user = new User({login : login})
+                let userModify = await userController.deleteFavorites(user,favoris)
+                delete userModify.salt
+                delete userModify.password
+                if (user!=null) {
+                    console.log(userModify.login, "successfully deleted");
+                    return h.response(userModify).code(202)
+                }
+                throw new Error("User is not deleted")
+            } catch (e) {
+                console.error(e);
+                return h.response({message: e.meta.cause, code: 404}).code(404)
+            }
+        }
+    },
+    
+    {
         method: 'PUT',
         path: '/user/{login}',
         options: {
@@ -405,9 +446,6 @@ const routes =[
         },
         handler: async (request, h) => {
             try{
-                console.log("cdsfds");
-                console.log(request.params.login);
-                console.log(request.payload);
                 const login = request.params.login
                 const user = await userController.findByLogin(login)
                 const userModify = await userController.deleteFavorites(user, request.payload)

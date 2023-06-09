@@ -5,6 +5,10 @@ import  Joi from 'joi';
 import { ports } from '../microServices.config.mjs';
 import { apiController } from './controller/apiController.mjs';
 import { APIJoiConfig } from './joiConfig.mjs';
+import inert from '@hapi/inert';
+import vision from '@hapi/vision'
+import swagger from 'hapi-swagger'
+import User from './model/User.mjs';
 
 const joiUserWithFavoris = Joi.object({
     login: Joi.string().required(),
@@ -25,6 +29,22 @@ const joiUser = Joi.object({
     email: Joi.string().required()
 })
 
+const joiUserConnexion = Joi.object({
+    login: Joi.string().required(),
+    password: Joi.string().required()
+})
+
+const joiFavorite = Joi.object({
+    users : Joi.array().items(joiUser),
+    placeId : Joi.string()
+})
+
+
+const joiFavoriteWithoutUsers = Joi.object({
+    // date: Joi.date(),
+    placeId : Joi.string().required()
+})
+
 
 const routes =[
     {
@@ -38,6 +58,15 @@ const routes =[
     {
         method: 'GET',
         path: '/generate/{ville}/{date?}',
+        options: {
+            description: 'Test logs',
+            tags: ["api"],
+            response: {
+                status: {
+                    200: joiUserWithFavoris.description("Le user a bien été récupéré")
+                }
+            }
+        },
         handler: async (request, h) => {
             const ville = request.params.ville
             const date = request.params.date || new Date(Date.now()).toLocaleDateString("en")
@@ -47,18 +76,40 @@ const routes =[
     {
         method: 'POST',
         path: '/connexion',
+        options: {
+            validate: {
+                payload: joiUserConnexion
+            },
+            description: 'Permet de récupérer un user',
+            tags: ["api"],
+            response: {
+                status: {
+                    200: joiUserWithFavoris.description("Le user a bien été récupéré"),
+                    404 : APIJoiConfig.error.description("Problème de récupération"),
+                    500 : APIJoiConfig.error.description("An internal server error occurred")
+                }
+            }
+        },
         handler: async (request, h) => {
-            let user = undefined
-            try {
-                user = JSON.parse(request.payload)
-            } catch(e) {
-                user = request.payload
+            try{
+                let user = undefined
+                try {
+                    user = JSON.parse(request.payload)
+                } catch(e) {
+                    user = request.payload
+                }
+                if (user == undefined) {
+                    return h.response({message : "Il faut donner un mot de passe et un login"}).code(400)
+                }
+                console.log("Try connecting user", user.login);
+                const result = await apiController.findConnexion(user.login, user.password)
+                if(result instanceof User){
+                    return h.response(await apiController.findConnexion(user.login,user.password)).code(200)
+                }
+                return h.response({message: "Pas de user de trouvé", code : 404}).code(404)
+            }catch(e){
+                return h.response({message : "An internal server error occurred", code : 500}).code(500)
             }
-            if (user == undefined) {
-                return h.response({message : "Il faut donner un mot de passe et un login"}).code(400)
-            }
-            console.log("Try connecting user", user.login);
-            return h.response(await apiController.findConnexion(user.login,user.password)).code(200)
         }
     },
     {
@@ -83,41 +134,41 @@ const routes =[
             return h.response(userAdd).code(200)
         }
     },
-    {
-        method: 'POST',
-        path: '/favoris',
-        options: {
-            validate: {
-                payload: joiUser
-            },
-            description: 'Crée un Favoris en base de donnée',
-            tags: ["api"],
-            response: {
-                status: {
-                    200: Joi.array().items(joiUser).description("Crée un Favoris"),
-                    400 : Joi.object({
-                        code: Joi.number().required().description("Code of returned error"),
-                        message: Joi.string().required().description("Error message")
-                    }).description("Le favoris existe déjà"),
-                    500: APIJoiConfig.error
-                }
-            }
-        },
-        handler: async (request, h) => {
-            try{
-            //Le body est accessible via request.payload
-            const favorisToAdd = request.payload
-            const favoris = await apiController.addFavoris(favorisToAdd)
-            if (favoris!=null)
-                return h.response(favoris).code(200)
-            else
-                return h.response({message: 'already exist'}).code(400)
-            }catch(e){
-                return h.response({message: e, code: 500}).code(500)
-            }
-        }
+    // {
+    //     method: 'POST',
+    //     path: '/favoris',
+    //     options: {
+    //         validate: {
+    //             payload: joiFavoriteWithoutUsers
+    //         },
+    //         description: 'Crée un Favoris en base de donnée',
+    //         tags: ["api"],
+    //         response: {
+    //             status: {
+    //                 200: Joi.array().items(joiFavorite).description("Crée un Favoris"),
+    //                 400 : Joi.object({
+    //                     code: Joi.number().required().description("Code of returned error"),
+    //                     message: Joi.string().required().description("Error message")
+    //                 }).description("Le favoris existe déjà"),
+    //                 500: APIJoiConfig.error
+    //             }
+    //         }
+    //     },
+    //     handler: async (request, h) => {
+    //         try{
+    //         //Le body est accessible via request.payload
+    //         const favorisToAdd = request.payload
+    //         const favoris = await apiController.addFavoris(favorisToAdd)
+    //         if (favoris!=null)
+    //             return h.response(favoris).code(200)
+    //         else
+    //             return h.response({message: 'already exist'}).code(400)
+    //         }catch(e){
+    //             return h.response({message: e, code: 500}).code(500)
+    //         }
+    //     }
         
-    },
+    // },
     {
         method: 'POST',
         path: '/restaurant/{ville}',
@@ -162,7 +213,45 @@ const routes =[
             }catch(e){
                 return h.response({message: e, code: 500}).code(500)
             }
-        }
+        },
+        method: 'PUT',
+        path: '/favoris',
+        options: {
+            description: 'rajoute un favoris (placeId) à un utilisateur(login))',
+            tags: ["api"],
+            response: {
+                status: {
+                    200: joiUserWithFavoris.description("Le User qui a eu un nouveau favoris"),
+                    400: APIJoiConfig.error
+                }
+            },
+            validate: {
+                // params: Joi.object({
+                //     login: Joi.string().required()
+                // }),
+                payload: Joi.object({
+                    placeId : Joi.string().required(),
+                    user : Joi.object({
+                        login : Joi.string().required(),
+                        password : Joi.string().required()
+                    })
+                }) 
+            }
+        },
+        handler: async (request, h) => {
+            try{
+                const userBody = request.payload.user
+                const user = await apiController.findConnexion(userBody.login, userBody.password)
+                console.log("HHUIBIYSCVBSID");
+                const userModify = await apiController.addFavoritesUser(user, request.payload.placeId)
+                return h.response(userModify).code(200) 
+            }catch(e){
+                return h.response({message: 'Ce favoris est déjà présent chez le user', code: 400}).code(400)
+            }
+        },
+        
+        
+
         
     }
 ]
@@ -187,6 +276,11 @@ export const init = async () => {
 };
 
 export  const start = async () => {
+    await server.register([inert, vision,
+        {
+            plugin : swagger,
+            options : APIJoiConfig.swaggerOptions
+        }])
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
     return server;

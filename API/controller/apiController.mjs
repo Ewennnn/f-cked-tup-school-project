@@ -17,5 +17,6 @@ export const apiController = {
     findConnexion : async (login, password) => await apiDAO.findConnexion(login, password),
     findFavorisByLogin : async (login) => await apiDAO.findFavorisByLogin(login),
     addUser : async (user) => await apiDAO.addUser(user),
-    addFavoris : async (favoris) => await apiDAO.addFavoris(favoris)
+    addFavoris : async (favoris) => await apiDAO.addFavoris(favoris),
+    addFavoritesUser : async (user, favoris) => await apiDAO.addFavoritesUser(user, favoris)
 }

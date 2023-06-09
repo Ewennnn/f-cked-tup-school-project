@@ -45,6 +45,44 @@ const joiFavoriteWithoutUsers = Joi.object({
     placeId : Joi.string().required()
 })
 
+const joiBestDate = Joi.object({
+    date : Joi.date().required(),
+    location : Joi.object({
+        city : Joi.string().required(),
+        code_insee : Joi.number().required(),
+
+        coords : Joi.object({
+                latitude : Joi.number().required(),
+                longitude : Joi.number().required(),
+        })
+
+    }),
+    place : Joi.object({
+        place_id : Joi.string().required(),
+        name : Joi.string().required(),
+        vicinity : Joi.string().required(),
+        coords : Joi.object({
+            latitude : Joi.number().required(),
+            longitude : Joi.number().required(),
+        }),
+        rating : Joi.number().required(),
+        types : Joi.array().items(Joi.string()),
+        photos : Joi.array().items(Joi.object({
+            photo_reference : Joi.string().required(),
+            width : Joi.number().required(),
+            link : Joi.string().required()
+        }))
+    }),
+    weather : Joi.object({
+        timestamp : Joi.number().required(),
+        weather : Joi.number().required(),
+        temp2m : Joi.number().required(),
+        probarain : Joi.number().required(),
+        wind10m : Joi.number().required(),
+        probawind70 : Joi.number().required()
+    })
+})
+
 
 const routes =[
     {
@@ -59,17 +97,24 @@ const routes =[
         method: 'GET',
         path: '/generate/{ville}/{date?}',
         options: {
+            validate : {
+                params : Joi.object({
+                    ville : Joi.string().required(),
+                    date : Joi.string()
+                })
+                
+            },
             description: 'Test logs',
             tags: ["api"],
             response: {
                 status: {
-                    200: Joi.array()
+                    200: Joi.array().items(joiBestDate)
                 }
             }
         },
         handler: async (request, h) => {
             const ville = request.params.ville
-            const date = request.params.date || new Date(Date.now()).toLocaleDateString("en")
+            const date = request.params.date == undefined ? request.params.date : new Date(Date.now()).toLocaleDateString("en")
             return h.response(await apiController.generateDates(ville, date)).code(200)
         }
     },
@@ -138,86 +183,7 @@ const routes =[
             }
         }
     },
-    // {
-    //     method: 'POST',
-    //     path: '/favoris',
-    //     options: {
-    //         validate: {
-    //             payload: joiFavoriteWithoutUsers
-    //         },
-    //         description: 'Crée un Favoris en base de donnée',
-    //         tags: ["api"],
-    //         response: {
-    //             status: {
-    //                 200: Joi.array().items(joiFavorite).description("Crée un Favoris"),
-    //                 400 : Joi.object({
-    //                     code: Joi.number().required().description("Code of returned error"),
-    //                     message: Joi.string().required().description("Error message")
-    //                 }).description("Le favoris existe déjà"),
-    //                 500: APIJoiConfig.error
-    //             }
-    //         }
-    //     },
-    //     handler: async (request, h) => {
-    //         try{
-    //         //Le body est accessible via request.payload
-    //         const favorisToAdd = request.payload
-    //         const favoris = await apiController.addFavoris(favorisToAdd)
-    //         if (favoris!=null)
-    //             return h.response(favoris).code(200)
-    //         else
-    //             return h.response({message: 'already exist'}).code(400)
-    //         }catch(e){
-    //             return h.response({message: e, code: 500}).code(500)
-    //         }
-    //     }
-        
-    // },
     {
-        method: 'POST',
-        path: '/restaurant/{ville}',
-        options: {
-            validate: {
-                payload: Joi.array().items(Joi.date()).description("tableau de date")
-            },
-            description: 'Crée un Favoris en base de donnée',
-            tags: ["api"],
-            response: {
-                status: {
-                    200: Joi.array().items(joiUser).description("Crée un Favoris"),
-                    400 : Joi.object({
-                        code: Joi.number().required().description("Code of returned error"),
-                        message: Joi.string().required().description("Error message")
-                    }).description("Le favoris existe déjà"),
-                    500: APIJoiConfig.error
-                }
-            }
-        },
-        handler: async (request, h) => {
-            try{
-                //Le body est accessible via request.payload
-                const dates = request.payload
-                const ville = request.params.ville
-
-                const location = apiController.findLocationVille(ville)
-                // const code_insee = location.code_insee
-
-
-                /**liste de placeId */
-                const placeId = apiController.findRestaurantCoordinate(ville.latitude, ville.longitude, 50.0)
-
-                const restaurants = []
-
-                placeId.then(element =>
-                    apiController.findRestaurantPlaceId(element).then(
-                        restaurant => restaurants.push(restaurant)
-                    ))
-
-                return h.response(restaurants).code(200)
-            }catch(e){
-                return h.response({message: e, code: 500}).code(500)
-            }
-        },
         method: 'POST',
         path: '/favoris',
         options: {
@@ -247,7 +213,9 @@ const routes =[
             }catch(e){
                 return h.response({message: 'Ce favoris est déjà présent chez le user', code: 400}).code(400)
             }
-        },
+        }
+    },
+    {
         method: 'POST',
         path: '/deleteFavorisUser',
         options: {

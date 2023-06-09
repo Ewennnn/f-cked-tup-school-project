@@ -82,3 +82,5 @@ Il est possible d'afficher les logs des web services en éxécutant **depuis la 
 
 - Utiliser le téléphone Nexus 5X
 - Utiliser l'API Android 33
+
+Nous utilisons un VPS sur lequel sont déployés nos services pour facilité les échanges.

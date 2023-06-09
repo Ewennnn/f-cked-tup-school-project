@@ -63,7 +63,7 @@ const routes =[
             tags: ["api"],
             response: {
                 status: {
-                    200: joiUserWithFavoris.description("Le user a bien été récupéré")
+                    200: Joi.array()
                 }
             }
         },

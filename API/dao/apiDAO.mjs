@@ -112,13 +112,18 @@ export const apiDAO = {
     findConnexion : async (login,password) => {
         const url = "http://localhost:3003/user/" + login + "/" + password
         const response = await fetchUsingAgent(url)
+        console.log(response);
+        console.log("-----------------------------------------------");
         const body = await response.json()
         if(body.code){
+            console.log("YOUHOUUUUUUUUUUU");
+            console.log(body);
             return body
         }
 
         const data = new User(body)
         delete data.password
+
 
         return data
     },
@@ -164,6 +169,21 @@ export const apiDAO = {
         }
 
         const data = new Favoris(body)
+
+        return data
+    },
+    addFavoritesUser : async (login,favoris) => {
+        const url = "http://localhost:3003/favoris/" + login
+        favoris = {placeId : favoris}
+        const response = await fetchUsingAgent(url, {method : "PUT", body : JSON.stringify(favoris), headers: {'Content-Type': 'application/json'}} )
+        const body = await response.json()
+        if(body.code){
+            return body
+        }
+
+        const data = new User(body)
+
+        delete data.password
 
         return data
     },

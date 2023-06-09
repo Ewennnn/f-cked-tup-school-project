@@ -89,7 +89,8 @@ const routes =[
             response: {
                 status: {
                     200: joiUserWithFavoris.description("un User qui a le login et password qu on lui a passé en paramètre"),
-                    404: UserJoiConfig.error
+                    404: UserJoiConfig.error,
+                    // 400: UserJoiConfig.error
                 }
             }
         },
@@ -108,8 +109,9 @@ const routes =[
                         return h.response(user).code(200)
                     }
                 }
+                return h.response({message: "User not found", code: 400}).code(400)
             } catch (e) {
-                return h.response({message: "User not found", code: 404}).code(404)
+                return h.response({message: "Error in processus", code: 404}).code(404)
             }
         }
     },
@@ -208,13 +210,13 @@ const routes =[
         path: '/favoris',
         options: {
             validate: {
-                payload: joiUser
+                payload: joiFavorite
             },
             description: 'Crée un Favoris en base de donnée',
             tags: ["api"],
             response: {
                 status: {
-                    200: Joi.array().items(joiUser).description("Crée un Favoris"),
+                    200: Joi.array().items(joiFavorite).description("Crée un Favoris"),
                     400 : Joi.object({
                         code: Joi.number().required().description("Code of returned error"),
                         message: Joi.string().required().description("Error message")
@@ -338,8 +340,6 @@ const routes =[
         },
         handler: async (request, h) => {
             try{
-                console.log(request.params.login);
-                console.log(request.payload);
                 const user = await userController.update(request.params.login,request.payload)
                 if(user == null){
                     console.log("testttttttt");
@@ -373,8 +373,6 @@ const routes =[
         },
         handler: async (request, h) => {
             try{
-                console.log(request.params.login);
-                console.log(request.payload);
                 const login = request.params.login
                 const user = await userController.findByLogin(login)
                 const userModify = await userController.addFavorites(user, request.payload)
@@ -407,6 +405,7 @@ const routes =[
         },
         handler: async (request, h) => {
             try{
+                console.log("cdsfds");
                 console.log(request.params.login);
                 console.log(request.payload);
                 const login = request.params.login

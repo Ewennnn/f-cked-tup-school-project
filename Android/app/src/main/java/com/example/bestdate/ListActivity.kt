@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 class ListActivity : AppCompatActivity() {
     private lateinit var restaurantsView : RecyclerView
     private var restaurants: List<Restaurant> = listOf()
+    private lateinit var adapter : MyAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
@@ -24,20 +25,22 @@ class ListActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Résultats de recherche"
 
-        restaurantsView = findViewById(R.id.restaurantsView)
-        restaurantsView.layoutManager = LinearLayoutManager(this)
+        var restauTest = Restaurant("12", "Test", "test", 2.0)
+        restaurants = mutableListOf()
 
         // Research parameters
         val latitude = intent.getDoubleExtra("latitude", 0.0)
         val longitude = intent.getDoubleExtra("longitude", 0.0)
         val radius = intent.getIntExtra("radius", 0)
-
         this.executeCall(latitude, longitude, radius)
-        println(restaurants)
 
-        val adapter = ArrayAdapter<Restaurant>(this, android.R.layout.simple_list_item_1, restaurants)
+        restaurantsView = findViewById(R.id.restaurantsView)
         restaurantsView.layoutManager = LinearLayoutManager(this)
-        restaurantsView.adapter = MyAdapter(restaurants)
+
+        adapter = MyAdapter(this, restaurants)
+        restaurantsView.adapter = adapter
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -57,9 +60,13 @@ class ListActivity : AppCompatActivity() {
                 val response = withContext(Dispatchers.IO) {
                     ApiClient.apiService.getRestauants(latitude, longitude, radius)
                 }
-
-                restaurants = response
                 println(response)
+                runOnUiThread {
+                    adapter.update(response as MutableList<Restaurant>)
+                }
+
+
+
 
                 //if (response.isSuccessful && response.body() != null) {
                 //    val content = response.body()

@@ -340,8 +340,6 @@ const routes =[
         },
         handler: async (request, h) => {
             try{
-                console.log(request.params.login);
-                console.log(request.payload);
                 const user = await userController.update(request.params.login,request.payload)
                 if(user == null){
                     console.log("testttttttt");
@@ -375,8 +373,6 @@ const routes =[
         },
         handler: async (request, h) => {
             try{
-                console.log(request.params.login);
-                console.log(request.payload);
                 const login = request.params.login
                 const user = await userController.findByLogin(login)
                 const userModify = await userController.addFavorites(user, request.payload)
@@ -409,6 +405,7 @@ const routes =[
         },
         handler: async (request, h) => {
             try{
+                console.log("cdsfds");
                 console.log(request.params.login);
                 console.log(request.payload);
                 const login = request.params.login

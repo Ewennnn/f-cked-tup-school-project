@@ -214,10 +214,10 @@ const routes =[
                 return h.response({message: e, code: 500}).code(500)
             }
         },
-        method: 'PUT',
+        method: 'POST',
         path: '/favoris',
         options: {
-            description: 'rajoute un favoris (placeId) à un utilisateur(login))',
+            description: 'rajoute un favoris  à un utilisateur',
             tags: ["api"],
             response: {
                 status: {
@@ -231,19 +231,14 @@ const routes =[
                 // }),
                 payload: Joi.object({
                     placeId : Joi.string().required(),
-                    user : Joi.object({
-                        login : Joi.string().required(),
-                        password : Joi.string().required()
-                    })
+                    login : Joi.string().required(),
                 }) 
             }
         },
         handler: async (request, h) => {
             try{
-                const userBody = request.payload.user
-                const user = await apiController.findConnexion(userBody.login, userBody.password)
-                console.log("HHUIBIYSCVBSID");
-                const userModify = await apiController.addFavoritesUser(user, request.payload.placeId)
+                const login = request.payload.login
+                const userModify = await apiController.addFavoritesUser(login, request.payload.placeId)
                 return h.response(userModify).code(200) 
             }catch(e){
                 return h.response({message: 'Ce favoris est déjà présent chez le user', code: 400}).code(400)

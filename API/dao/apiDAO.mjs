@@ -170,18 +170,18 @@ export const apiDAO = {
 
         return data
     },
-    addFavoritesUser : async (user,favoris) => {
-        console.log("----------------------APIDAO");
-        console.log(user);
-        console.log(favoris);
-        const url = "http://localhost:3003/user/" + user.login
-        const response = await fetchUsingAgent(url, {method : "PUT", body : favoris} )
-        const body = await response.body
+    addFavoritesUser : async (login,favoris) => {
+        const url = "http://localhost:3003/favoris/" + login
+        favoris = {placeId : favoris}
+        const response = await fetchUsingAgent(url, {method : "PUT", body : JSON.stringify(favoris), headers: {'Content-Type': 'application/json'}} )
+        const body = await response.json()
         if(body.code){
             return body
         }
 
         const data = new User(body)
+
+        delete data.password
 
         return data
     },

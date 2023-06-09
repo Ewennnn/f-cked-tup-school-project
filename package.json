@@ -4,7 +4,7 @@
   "description": "",
   "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd micro-service_meteo && npm test && cd ../micro-service_places && npm test && cd ../micro-service_users && npm test && cd ../micro-service_location && npm test && cd ../API && npm test"
   },
   "author": "eq_alt0",
   "license": "ISC",

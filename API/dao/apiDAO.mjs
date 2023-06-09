@@ -112,11 +112,8 @@ export const apiDAO = {
     findConnexion : async (login,password) => {
         const url = "http://localhost:3003/user/" + login + "/" + password
         const response = await fetchUsingAgent(url)
-        console.log(response);
-        console.log("-----------------------------------------------");
         const body = await response.json()
         if(body.code){
-            console.log(body);
             return body
         }
 

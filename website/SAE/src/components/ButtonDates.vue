@@ -13,7 +13,7 @@
     --color: #FF6F6F;
     font-family: inherit;
     /* display: inline-block; */
-    width: 6em;
+    width: 7em;
     height: 2.6em;
     line-height: 2.5em;
     overflow: hidden;
@@ -21,7 +21,7 @@
     z-index: 1;
     color: var(--color);
     border: 2px solid var(--color);
-    border-radius: 6px;
+    border-radius: 50px;
     position: relative;
 }
 
@@ -36,8 +36,9 @@
 }
 
 .buttonDate:hover {
-  color: white;
+  color: white !important;
   border: 2px solid white;
+  cursor: pointer;
 }
 
 .buttonDate:before {
@@ -47,7 +48,7 @@
 }
 
 .buttonDate:hover::before {
-  top: -30px;
+  top: -50px;
   left: -30px;
 }
 </style>

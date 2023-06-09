@@ -129,9 +129,13 @@ const routes =[
             }
         },
         handler: async (request, h) => {
-            const user = request.payload
-            const userAdd = await apiController.addUser(user)
-            return h.response(userAdd).code(200)
+            try{
+                const user = request.payload
+                const userAdd = await apiController.addUser(user)
+                return h.response(userAdd).code(200)
+            }catch(e){
+                return h.response({message : e}).code(400)
+            }
         }
     },
     // {
@@ -191,25 +195,25 @@ const routes =[
         },
         handler: async (request, h) => {
             try{
-            //Le body est accessible via request.payload
-            const dates = request.payload
-            const ville = request.params.ville
+                //Le body est accessible via request.payload
+                const dates = request.payload
+                const ville = request.params.ville
 
-            const location = apiController.findLocationVille(ville)
-            // const code_insee = location.code_insee
+                const location = apiController.findLocationVille(ville)
+                // const code_insee = location.code_insee
 
 
-            /**liste de placeId */
-            const placeId = apiController.findRestaurantCoordinate(ville.latitude, ville.longitude, 50.0)
+                /**liste de placeId */
+                const placeId = apiController.findRestaurantCoordinate(ville.latitude, ville.longitude, 50.0)
 
-            const restaurants = []
+                const restaurants = []
 
-            placeId.then(element =>
-                apiController.findRestaurantPlaceId(element).then(
-                    restaurant => restaurants.push(restaurant)
-                ))
+                placeId.then(element =>
+                    apiController.findRestaurantPlaceId(element).then(
+                        restaurant => restaurants.push(restaurant)
+                    ))
 
-            return h.response(restaurants).code(200)
+                return h.response(restaurants).code(200)
             }catch(e){
                 return h.response({message: e, code: 500}).code(500)
             }

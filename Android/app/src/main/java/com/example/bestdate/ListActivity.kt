@@ -3,7 +3,6 @@ package com.example.bestdate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +19,7 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
+
 
         // Activer le bouton retour dans l'actionBar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -58,7 +58,7 @@ class ListActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    ApiClient.apiService.getRestauants(latitude, longitude, radius)
+                    ApiClient.apiService.getRestaurants(latitude, longitude, radius)
                 }
                 println(response)
                 runOnUiThread {

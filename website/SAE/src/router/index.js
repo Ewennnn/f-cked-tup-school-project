@@ -37,7 +37,7 @@ const router = createRouter({
       component: FavorisVue
     },
     {
-      path: '/dates',
+      path: '/dates/:ville',
       name: 'dates',
       component: DatesVue
     }

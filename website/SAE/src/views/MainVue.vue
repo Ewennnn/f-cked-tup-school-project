@@ -19,7 +19,7 @@ import ButtonDates from '../components/ButtonDates.vue';
                     stateful
                     @click="test"
                 />
-                <ButtonDates name="Create Date !" class="buttonDate"></ButtonDates>
+                <ButtonDates @click="validate" name="Create Date !" class="buttonDate"></ButtonDates>
             </div>
         </div>
         <router-view></router-view>
@@ -45,6 +45,11 @@ export default {
   methods: {
     test() {
         console.log(this.date);
+    },
+    validate() {
+        const param1 = this.ville;
+        const param2 = this.date;
+        this.$router.push({ name: "dates", params: { ville: param1, date: param2 } });
     }
   }
 };

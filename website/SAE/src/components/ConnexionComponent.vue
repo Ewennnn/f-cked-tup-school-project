@@ -1,38 +1,39 @@
 <script setup>
 import { useCookies } from "vue3-cookies";
 import { RouterLink } from 'vue-router';
-import axios from 'axios';
 </script>
 
 <script>
   export default {
     setup() {
-    const { cookies } = new useCookies();
-    return { cookies };
-  },
-  data() {
-    return {
-      login: "",
-      password: "",
-    }
-  },
-  methods: {
-    async connect() {
-      try {
-        const response = await axios.post('http://localhost:3200/connexion', JSON.stringify({
-          login: this.login,
-          password: this.password
-        }));
+      const { cookies } = new useCookies();
+      return { cookies };
+    },
+    data() {
+      return {
+        login: "",
+        password: "",
+      }
+    },
+    methods: {
+      async connect() {
+        try {
+          const response = await fetch('http://127.0.0.1:3200/connexion', {
+            method: "POST",
+            body: JSON.stringify({
+              login: this.login,
+              password: this.password
+          }), headers: {"Content-Type":"application/json"}});
 
-        if (response.status === 200) {
-          this.$router.push({ name: 'main' });
+          if (response.status === 200) {
+            this.$router.push({ name: 'main' });
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
       }
     }
   }
-}
 </script>
 
 <template>
@@ -73,6 +74,7 @@ import axios from 'axios';
 <style scoped>
 
 .form {
+  position: absolute;
   background-color: #fff;
   display: block;
   padding: 1rem;

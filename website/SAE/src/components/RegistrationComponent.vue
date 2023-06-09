@@ -60,7 +60,7 @@ import axios from 'axios';
         }),
         {headers: {"Content-Type":"application/json"}});
 
-        console.log(response.data); // Réponse du serveur
+        console.log(response); // Réponse du serveur
         // Ajoutez ici la logique pour gérer la réponse du serveur après l'enregistrement
 
         // Redirection vers une autre page après l'enregistrement réussi
@@ -78,6 +78,7 @@ import axios from 'axios';
 
 <style scoped>
 .form {
+  position: absolute;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -85,7 +86,6 @@ import axios from 'axios';
   background-color: #fff;
   padding: 20px;
   border-radius: 20px;
-  position: relative;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
